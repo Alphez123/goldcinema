@@ -1,0 +1,515 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gold Cinema - Experience the Magic</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        :root {
+            --primary-gold: #ffd700;
+            --secondary-gold: #ffaa00;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-color: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: var(--text-color);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Background matching homepage */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            background-image: linear-gradient(to right, rgba(15, 12, 41, 0.8), rgba(36, 36, 62, 0.8)),
+            url("{% static 'images/cinema.jpg' %}");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed;
+            background-size: cover;
+        }
+
+        /* Navbar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 2rem 5%;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        .logo::before {
+            content: "🎬 ";
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Hero Section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 20px 4rem;
+            position: relative;
+            min-height: 70vh;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            z-index: 2;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        h1 {
+            font-size: 4rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            color: #fff;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+        }
+
+        p.subtitle {
+            font-size: 1.4rem;
+            color: #e0e0e0;
+            margin-bottom: 3rem;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-primary {
+            background: rgba(255, 215, 0, 0.2);
+            color: var(--primary-gold);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 215, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            transform: translateY(-3px);
+            color: #fff;
+            border-color: #fff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+        }
+
+        /* Carousel Section */
+        .carousel-section {
+            padding: 4rem 0 6rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .carousel-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 0 5%;
+        }
+
+        .carousel-header h2 {
+            font-size: 3rem;
+            color: #fff;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .carousel-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ffd700, transparent);
+            border-radius: 2px;
+        }
+
+        .carousel-header p {
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 20px 0;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 30px;
+            animation: scroll 30s linear infinite;
+            width: fit-content;
+        }
+
+        .carousel-track:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .carousel-item {
+            flex: 0 0 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .carousel-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+
+        .carousel-item-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel-item:hover .carousel-item-image {
+            transform: scale(1.1);
+        }
+
+        .carousel-item-content {
+            padding: 20px;
+        }
+
+        .carousel-item-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 10px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .carousel-item-meta {
+            display: flex;
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .carousel-item-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .carousel-item-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--primary-gold);
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--primary-gold);
+            margin-bottom: 15px;
+        }
+
+        .feature-title {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .feature-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.9rem;
+            z-index: 10;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-content {
+                padding: 0 10px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .carousel-item {
+                flex: 0 0 250px;
+            }
+
+            .carousel-item-image {
+                height: 350px;
+            }
+
+            .carousel-header h2 {
+                font-size: 2rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <nav>
+        <div class="logo">Gold Cinema</div>
+        <div class="nav-links">
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-primary"
+                style="padding: 10px 25px; font-size: 0.9rem; box-shadow: none;">Sign Up</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Experience Cinema<br>Like Never Before</h1>
+            <p class="subtitle">Immerse yourself in luxury, sound, and the magic of the big screen. Book your tickets
+                for the latest blockbusters, concerts, and plays.</p>
+
+            <div class="cta-buttons">
+                <a href="{% url 'register' %}" class="btn btn-primary">Get Started</a>
+                <a href="{% url 'login' %}" class="btn btn-secondary">Sign In</a>
+            </div>
+
+            <div class="features">
+                <div class="feature-card">
+                    <i class="fas fa-couch feature-icon"></i>
+                    <div class="feature-title">Luxury Seating</div>
+                    <div class="feature-desc">Premium recliners for ultimate comfort.</div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-volume-up feature-icon"></i>
+                    <div class="feature-title">Dolby Atmos</div>
+                    <div class="feature-desc">Crystal clear immersive sound.</div>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-ticket-alt feature-icon"></i>
+                    <div class="feature-title">Easy Booking</div>
+                    <div class="feature-desc">Seamless online ticket reservation.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {% if featured_items %}
+    <section class="carousel-section">
+        <div class="carousel-header">
+            <h2>Now Showing</h2>
+            <p>Explore our latest movies, concerts, and theatrical performances</p>
+        </div>
+
+        <div class="carousel-container">
+            <div class="carousel-track">
+                {% for item in featured_items %}
+                <a href="{% url 'register' %}" class="carousel-item">
+                    {% if item.poster %}
+                    <img src="{{ item.poster.url }}" alt="{{ item.title }}" class="carousel-item-image">
+                    {% else %}
+                    <img src="{% static 'images/other-movies.jpg' %}" alt="{{ item.title }}"
+                        class="carousel-item-image">
+                    {% endif %}
+                    <div class="carousel-item-content">
+                        <div class="carousel-item-title">{{ item.title }}</div>
+                        <div class="carousel-item-meta">
+                            {% if item.genre %}
+                            <span><i class="fas fa-film"></i> {{ item.genre }}</span>
+                            {% endif %}
+                            {% if item.duration %}
+                            <span><i class="fas fa-clock"></i> {{ item.duration }} mins</span>
+                            {% endif %}
+                        </div>
+                        <span class="carousel-item-category">{{ item.category }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+
+                <!-- Duplicate items for seamless loop -->
+                {% for item in featured_items %}
+                <a href="{% url 'register' %}" class="carousel-item">
+                    {% if item.poster %}
+                    <img src="{{ item.poster.url }}" alt="{{ item.title }}" class="carousel-item-image">
+                    {% else %}
+                    <img src="{% static 'images/other-movies.jpg' %}" alt="{{ item.title }}"
+                        class="carousel-item-image">
+                    {% endif %}
+                    <div class="carousel-item-content">
+                        <div class="carousel-item-title">{{ item.title }}</div>
+                        <div class="carousel-item-meta">
+                            {% if item.genre %}
+                            <span><i class="fas fa-film"></i> {{ item.genre }}</span>
+                            {% endif %}
+                            {% if item.duration %}
+                            <span><i class="fas fa-clock"></i> {{ item.duration }} mins</span>
+                            {% endif %}
+                        </div>
+                        <span class="carousel-item-category">{{ item.category }}</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <footer>
+        &copy; 2025 Gold Cinema. All rights reserved.
+    </footer>
+
+</body>
+
+</html>

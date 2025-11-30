@@ -1,0 +1,17 @@
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}">
+
+<div class="notification-float">
+    <button id="notificationBtn" class="float-icon-btn">
+        <i class="fas fa-bell"></i>
+        <span id="notificationCount" class="badge">0</span>
+    </button>
+    <div id="notificationDropdown" class="dropdown-content">
+        <p class="dropdown-header">Notifications</p>
+        <div id="notificationList">
+            <p class="empty-message">No new notifications.</p>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'js/notification.js' %}"></script>

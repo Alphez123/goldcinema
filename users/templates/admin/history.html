@@ -1,0 +1,93 @@
+{% extends "admin/admin_base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>History</h1>
+
+<div class="card" style="margin-bottom: 30px;">
+    <h2>Events History</h2>
+    <p>List of all movies, plays, and concerts.</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>
+                    {% if event.category == 'movie' %}
+                    <span class="badge badge-primary">Movie</span>
+                    {% elif event.category == 'concert' %}
+                    <span class="badge badge-success">Concert</span>
+                    {% elif event.category == 'play' %}
+                    <span class="badge badge-warning">Play</span>
+                    {% else %}
+                    {{ event.category|title }}
+                    {% endif %}
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="2">No events found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<div class="card">
+    <h2>Performances</h2>
+    <p>Ticket sales and performance dates.</p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Event Name</th>
+                <th>Tickets Sold</th>
+                <th>Seats Booked</th>
+                <th>Date of Performance</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for event in events %}
+            <tr>
+                <td>{{ event.name }}</td>
+                <td>{{ event.tickets_sold }}</td>
+                <td>{{ event.seats_booked }}</td>
+                <td>{{ event.performance_date|date:"F j, Y, g:i a"|default:"TBD" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4">No performance data available.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<style>
+    .badge {
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 0.85em;
+        font-weight: bold;
+        color: #fff;
+    }
+
+    .badge-primary {
+        background-color: #007bff;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+        color: #000;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,385 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Gold Cinema - Home</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="{% static 'css/home-page.css' %}">
+  <link rel="stylesheet" href="{% static 'css/notification-modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/account-modal.css' %}">
+
+</head>
+
+<body>
+  {% include 'includes/notifications.html' %}
+  <div class="sidebar" id="sidebar">
+    <h2><i class="fas fa-film"></i> Menu</h2>
+    <div class="funds-section" style=" background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
+      <h3 style="color: #ffd700; font-size: 1.1em; margin-bottom: 10px;">My Funds</h3>
+      <p style="color: #fff; font-size: 1.2em; font-weight: bold; margin-bottom: 15px;">
+        KSH <span id="userBalance">{{ user.balance }}</span>
+      </p>
+      <button class="menubtn" id="openDepositModalBtn" disabled
+        style="background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; margin-bottom: 10px; opacity: 0.5; cursor: not-allowed;">
+        <i class="fas fa-plus-circle"></i> Deposit Funds (Coming Soon)
+      </button>
+
+      <button class="menubtn" id="openAccountModalBtn">My Account</button>
+      <button class="menubtn" id="openTicketsModalBtn">My Tickets</button>
+    </div>
+
+    <button class="menubtn" id="logoutBtn" style="margin-top: auto;">Logout</button>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+
+  <nav>
+    <div class="logo">Gold Cinema</div>
+    <ul>
+      <li><a href="#movies">Movies</a></li>
+      <li><a href="#concerts">Concerts</a></li>
+      <li><a href="#plays">Plays</a></li>
+    </ul>
+    <i class="fas fa-bars menu-btn" id="menu-btn"></i>
+  </nav>
+
+  <section id="hero" class="hero">
+    <h1>Hi, {{ user.first_name|default:user.username }}! Welcome to Gold Cinema Ticket Booking</h1>
+    <p>Experience movies, plays, and concerts like never before — luxury, sound, and the magic of the big
+      screen.</p>
+    <button id="bookNowBtn" class="button">Book Now</button>
+  </section>
+
+  <!-- =========================
+     NOW SHOWING CONCERTS
+========================= -->
+  <section id="concerts">
+    <h2>Now Showing Concerts</h2>
+    <div class="movie-grid">
+      {% for concert in concerts %}
+      <div class="movie">
+        <a href="{% url 'book_movie' concert.title %}">
+          {% if concert.poster %}
+          <img src="{{ concert.poster.url }}" alt="{{ concert.title }}">
+          {% else %}
+          <img src="{% static 'images/other-movies.jpg' %}" alt="{{ concert.title }}">
+          {% endif %}
+        </a>
+        <div class="movie-info">
+          <h3>{{ concert.title }}</h3>
+          <p>{{ concert.genre|default:"Concert" }} | {{ concert.duration }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p style="color: #ccc; text-align: center; width: 100%;">No concerts currently showing.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+
+  <!-- =========================
+     NOW SHOWING MOVIES
+========================= -->
+  <section id="movies">
+    <h2>Now Showing Movies</h2>
+    <div class="movie-grid">
+      {% for movie in movies %}
+      <div class="movie">
+        <a href="{% url 'book_movie' movie.title %}">
+          {% if movie.poster %}
+          <img src="{{ movie.poster.url }}" alt="{{ movie.title }}">
+          {% else %}
+          <img src="{% static 'images/other-movies.jpg' %}" alt="{{ movie.title }}">
+          {% endif %}
+        </a>
+        <div class="movie-info">
+          <h3>{{ movie.title }}</h3>
+          <p>{{ movie.genre|default:"Movie" }} | {{ movie.duration }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p style="color: #ccc; text-align: center; width: 100%;">No movies currently showing.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+
+  <!-- =========================
+     NOW SHOWING PLAYS
+========================= -->
+  <section id="plays">
+    <h2>Now Showing Plays</h2>
+    <div class="movie-grid">
+      {% for play in plays %}
+      <div class="movie">
+        <a href="{% url 'book_movie' play.title %}">
+          {% if play.poster %}
+          <img src="{{ play.poster.url }}" alt="{{ play.title }}">
+          {% else %}
+          <img src="{% static 'images/other-movies.jpg' %}" alt="{{ play.title }}">
+          {% endif %}
+        </a>
+        <div class="movie-info">
+          <h3>{{ play.title }}</h3>
+          <p>{{ play.genre|default:"Play" }} | {{ play.duration }}</p>
+        </div>
+      </div>
+      {% empty %}
+      <p style="color: #ccc; text-align: center; width: 100%;">No plays currently showing.</p>
+      {% endfor %}
+    </div>
+
+  </section>
+
+  <footer>© 2025 Gold Cinema. All rights reserved.</footer>
+
+  <!-- Tickets Booked Modal -->
+  <div id="bookedTicketsModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h2><i class="fas fa-ticket-alt"></i> Your Booked Tickets</h2>
+      <div id="bookedTicketsList">
+        <p style="text-align: center; color: #c9a6ff;">Loading tickets...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Account Modal -->
+  <div id="accountModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn account-close">&times;</span>
+      <h2><i class="fas fa-user-circle"></i> My Account</h2>
+
+      <div id="accountContent">
+        <div class="account-info">
+
+          <div class="account-field">
+            <label>Full Name:</label>
+            <span id="accountFullName">
+              {{ user.first_name }} {{ user.last_name }}
+            </span>
+          </div>
+
+          <div class="account-field">
+            <label>Email:</label>
+            <span id="accountEmail">{{ user.email }}</span>
+          </div>
+
+          <div class="account-field">
+            <label>Phone Number:</label>
+            <span id="accountPhone">
+              {% if user.phone %}{{ user.phone }}{% else %}Not provided{% endif %}
+            </span>
+          </div>
+
+          <div class="account-field">
+            <label>Location:</label>
+            <span id="accountLocation">
+              {% if user.city or user.address or user.zip_code %}
+              {{ user.city }} {{ user.address }} {{ user.zip_code }}
+              {% else %}
+              Not provided
+              {% endif %}
+            </span>
+          </div>
+
+        </div>
+
+        <div class="account-actions">
+          <button id="editAccountBtn" class="action-btn">
+            <i class="fas fa-user-edit"></i> Edit Account
+          </button>
+          <button id="changePasswordBtn" class="action-btn">
+            <i class="fas fa-key"></i> Change Password
+          </button>
+          <button id="deleteAccountBtn" class="action-btn delete-btn">
+            <i class="fas fa-trash-alt"></i> Delete Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Profile Modal -->
+  <div id="editProfileModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeEditProfile">&times;</span>
+      <h2><i class="fas fa-user-edit"></i> Edit Profile</h2>
+
+      <form id="editProfileForm">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="editFirstName">First Name</label>
+          <input type="text" id="editFirstName" name="first_name" value="{{ user.first_name }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editLastName">Last Name</label>
+          <input type="text" id="editLastName" name="last_name" value="{{ user.last_name }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editEmail">Email</label>
+          <input type="email" id="editEmail" name="email" value="{{ user.email }}" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editPhone">Phone Number</label>
+          <input type="tel" id="editPhone" name="phone" value="{{ user.phone|default:'' }}">
+        </div>
+
+        <div class="form-group">
+          <label for="editCity">City</label>
+          <input type="text" id="editCity" name="city" value="{{ user.city|default:'' }}">
+        </div>
+
+        <div class="form-group">
+          <label for="editAddress">Address</label>
+          <input type="text" id="editAddress" name="address" value="{{ user.address|default:'' }}">
+        </div>
+
+        <div class="form-group">
+          <label for="editZipCode">Zip Code</label>
+          <input type="text" id="editZipCode" name="zip_code" value="{{ user.zip_code|default:'' }}">
+        </div>
+
+        <button type="submit" class="action-btn" style="width: 100%; margin-top: 10px;">
+          <i class="fas fa-save"></i> Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Change Password Modal -->
+  <div id="changePasswordModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeChangePassword">&times;</span>
+      <h2><i class="fas fa-key"></i> Change Password</h2>
+
+      <form id="changePasswordForm">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="currentPassword">Current Password</label>
+          <input type="password" id="currentPassword" name="current_password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="newPassword">New Password</label>
+          <input type="password" id="newPassword" name="new_password" required>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirm New Password</label>
+          <input type="password" id="confirmPassword" name="confirm_password" required>
+        </div>
+
+        <button type="submit" class="action-btn" style="width: 100%; margin-top: 10px;">
+          <i class="fas fa-key"></i> Change Password
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Account Confirmation Modal -->
+  <div id="deleteAccountModal" class="modal">
+    <div class="modal-content delete-modal">
+      <span class="close-btn" id="closeDeleteAccount">&times;</span>
+      <h2 style="color: #ff4d4d;"><i class="fas fa-exclamation-triangle"></i> Delete Account</h2>
+
+      <p style="text-align: center; margin: 20px 0; color: #e0e0e0;">
+        Are you sure you want to delete your account? This action cannot be undone and all your data will be
+        permanently
+        lost.
+      </p>
+
+      <form id="deleteAccountForm">
+        {% csrf_token %}
+        <div class="form-group">
+          <label for="deletePassword">Enter your password to confirm</label>
+          <input type="password" id="deletePassword" name="password" required>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+          <button type="button" class="action-btn" id="cancelDelete" style="flex: 1;">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+          <button type="submit" class="action-btn delete-btn" style="flex: 1;">
+            <i class="fas fa-trash-alt"></i> Delete Account
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Success/Error Notification Modal -->
+  <div id="notificationModal" class="modal">
+    <div class="modal-content notification-modal">
+      <div class="notification-icon" id="notificationIcon">
+        <i class="fas fa-check-circle"></i>
+      </div>
+      <h2 id="notificationTitle">Success</h2>
+      <p id="notificationMessage">Operation completed successfully!</p>
+      <button class="action-btn" id="closeNotificationBtn" style="width: 100%; margin-top: 20px;">
+        <i class="fas fa-times"></i> Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Deposit Modal -->
+  <div id="depositModal" class="modal">
+    <div class="modal-content" style="max-width: 400px; text-align: center;">
+      <span class="close-btn" id="closeDepositModal">&times;</span>
+      <h2 style="color: #4caf50;">Deposit Funds</h2>
+      <form id="depositForm" method="POST" action="{% url 'deposit' %}">
+        {% csrf_token %}
+        <label for="amount" style="text-align: left; color: #ffd700;">Amount (KSH)</label>
+        <input type="number" id="amount" name="amount" min="1" required
+          style="width: 100%; padding: 10px; margin-bottom: 20px; border-radius: 5px; border: 1px solid #ccc;">
+        <button type="submit" class="btn btn-primary" style="width: 100%; background: #4caf50; border: none;">Deposit
+          Now</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Logout Confirmation Modal -->
+  <div id="logoutModal" class="modal">
+    <div class="modal-content" style="text-align: center; max-width: 400px;">
+      <span class="close-btn" id="closeLogoutModal">&times;</span>
+      <h2 style="color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Logout</h2>
+      <p style="color: #e0e0e0; margin: 20px 0;">Are you sure you want to logout?</p>
+      <div style="display: flex; gap: 15px; justify-content: center;">
+        <button id="cancelLogoutBtn" class="action-btn"
+          style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);">Cancel</button>
+        <button id="confirmLogoutBtn" class="action-btn delete-btn">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- bookings JSON -->
+  {{ bookings|json_script:"bookings-data" }}
+  <script src="{% static 'js/script.js' %}"></script>
+
+
+  <!-- Advisor Support Popup -->
+  <a href="{% url 'advisor_list' %}" id="advisorSupportBtn"
+    style="position: fixed; bottom: 20px; right: 20px; background: #ffd700; color: #000; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3); display: flex; align-items: center; gap: 10px; z-index: 1000; transition: transform 0.3s ease;">
+    <i class="fas fa-headset" style="font-size: 1.2em;"></i>
+    <span>Advisor Support</span>
+  </a>
+
+  <script>
+    const supportBtn = document.getElementById('advisorSupportBtn');
+    supportBtn.addEventListener('mouseenter', () => {
+      supportBtn.style.transform = 'scale(1.05)';
+    });
+    supportBtn.addEventListener('mouseleave', () => {
+      supportBtn.style.transform = 'scale(1)';
+    });
+  </script>
+
+</body>
+
+</html>
