@@ -12,7 +12,10 @@ class CustomUserAdmin(UserAdmin):
     )
 
 class MovieAdmin(admin.ModelAdmin):
-    list_display = ['title', 'category', 'price', 'duration']
+    list_display = ['title', 'category', 'price', 'duration', 'coming_soon', 'scheduled_date']
+    list_filter = ['category', 'coming_soon']
+    list_editable = ['coming_soon']
+    search_fields = ['title', 'genre']
 
 class BookingAdmin(admin.ModelAdmin):
     list_display = ['user', 'movie_name', 'date', 'time', 'created_at']

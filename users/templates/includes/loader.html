@@ -1,0 +1,372 @@
+<!-- Page Loader HTML Structure -->
+<!-- Inlined CSS for Instant Loading Performance -->
+<style>
+    /* Critical Loader CSS */
+    .page-loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(15, 12, 41, 0.25);
+        backdrop-filter: blur(10px) saturate(180%);
+        -webkit-backdrop-filter: blur(10px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.125);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 99999;
+        transition: opacity 0.5s ease, visibility 0.5s ease;
+        will-change: opacity;
+    }
+
+    .page-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .loader-content {
+        text-align: center;
+        position: relative;
+    }
+
+    /* Cinema Film Reel Animation */
+    .film-reel {
+        width: 120px;
+        height: 120px;
+        position: relative;
+        margin: 0 auto 30px;
+    }
+
+    .reel {
+        width: 100%;
+        height: 100%;
+        border: 4px solid rgba(255, 215, 0, 0.3);
+        border-radius: 50%;
+        position: relative;
+        animation: spin 1.5s linear infinite;
+        will-change: transform;
+    }
+
+    .reel::before,
+    .reel::after {
+        content: '';
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: rgba(255, 215, 0, 0.5);
+        border-radius: 50%;
+    }
+
+    .reel::before {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .reel::after {
+        top: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ffd700;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+
+    /* Film Holes */
+    .film-hole {
+        position: absolute;
+        width: 15px;
+        height: 15px;
+        background: #ffd700;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+
+    .film-hole:nth-child(1) {
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .film-hole:nth-child(2) {
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+    }
+
+    .film-hole:nth-child(3) {
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .film-hole:nth-child(4) {
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+    }
+
+    /* Loading Text */
+    .loader-text {
+        font-family: 'Outfit', 'Segoe UI', sans-serif;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 15px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .loader-text span {
+        display: inline-block;
+        animation: wave 1.5s ease-in-out infinite;
+    }
+
+    .loader-text span:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .loader-text span:nth-child(2) {
+        animation-delay: 0.1s;
+    }
+
+    .loader-text span:nth-child(3) {
+        animation-delay: 0.2s;
+    }
+
+    .loader-text span:nth-child(4) {
+        animation-delay: 0.3s;
+    }
+
+    .loader-text span:nth-child(5) {
+        animation-delay: 0.4s;
+    }
+
+    .loader-text span:nth-child(6) {
+        animation-delay: 0.5s;
+    }
+
+    .loader-text span:nth-child(7) {
+        animation-delay: 0.6s;
+    }
+
+    .loader-text span:nth-child(8) {
+        animation-delay: 0.7s;
+    }
+
+    .loader-text span:nth-child(9) {
+        animation-delay: 0.8s;
+    }
+
+    .loader-text span:nth-child(10) {
+        animation-delay: 0.9s;
+    }
+
+    .loader-text span:nth-child(11) {
+        animation-delay: 1s;
+    }
+
+    .loader-text span:nth-child(12) {
+        animation-delay: 1.1s;
+    }
+
+    /* Progress Bar */
+    .loader-progress {
+        width: 250px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .loader-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, #ffd700, #ffaa00);
+        border-radius: 10px;
+        animation: progress 1.5s ease-in-out infinite;
+        box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        will-change: width, opacity;
+    }
+
+    /* Glowing Particles */
+    .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #ffd700;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+        animation: float-particle 3s ease-in-out infinite;
+    }
+
+    .particle:nth-child(1) {
+        top: 20%;
+        left: 20%;
+        animation-delay: 0s;
+    }
+
+    .particle:nth-child(2) {
+        top: 40%;
+        right: 25%;
+        animation-delay: 0.5s;
+    }
+
+    .particle:nth-child(3) {
+        bottom: 30%;
+        left: 30%;
+        animation-delay: 1s;
+    }
+
+    .particle:nth-child(4) {
+        top: 60%;
+        right: 20%;
+        animation-delay: 1.5s;
+    }
+
+    .particle:nth-child(5) {
+        bottom: 20%;
+        right: 35%;
+        animation-delay: 2s;
+    }
+
+    /* Animations */
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes wave {
+
+        0%,
+        100% {
+            transform: translateY(0);
+            color: #fff;
+        }
+
+        50% {
+            transform: translateY(-10px);
+            color: #ffd700;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+    }
+
+    @keyframes progress {
+        0% {
+            width: 0%;
+            opacity: 1;
+        }
+
+        50% {
+            width: 100%;
+            opacity: 1;
+        }
+
+        100% {
+            width: 100%;
+            opacity: 0.5;
+        }
+    }
+
+    @keyframes float-particle {
+
+        0%,
+        100% {
+            transform: translate(0, 0);
+            opacity: 0;
+        }
+
+        10% {
+            opacity: 1;
+        }
+
+        50% {
+            transform: translate(20px, -30px);
+            opacity: 1;
+        }
+
+        90% {
+            opacity: 1;
+        }
+
+        100% {
+            transform: translate(40px, -60px);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .film-reel {
+            width: 100px;
+            height: 100px;
+        }
+
+        .loader-text {
+            font-size: 1.2rem;
+        }
+
+        .loader-progress {
+            width: 200px;
+        }
+    }
+</style>
+
+<div class="page-loader" id="pageLoader">
+    <div class="loader-content">
+        <!-- Floating Particles -->
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+
+        <!-- Film Reel Animation -->
+        <div class="film-reel">
+            <div class="reel">
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+                <div class="film-hole"></div>
+            </div>
+        </div>
+
+        <!-- Loading Text with Wave Animation -->
+        <div class="loader-text">
+            <span>G</span><span>o</span><span>l</span><span>d</span>
+            <span> </span>
+            <span>C</span><span>i</span><span>n</span><span>e</span><span>m</span><span>a</span>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="loader-progress">
+            <div class="loader-progress-bar"></div>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript to hide loader when page loads -->
+<script>
+    // Use DOMContentLoaded as a fallback if load event is missed or takes too long
+    function hideLoader() {
+        const loader = document.getElementById('pageLoader');
+        if (loader && !loader.classList.contains('hidden')) {
+            loader.classList.add('hidden');
+            setTimeout(() => {
+                loader.remove();
+            }, 500);
+        }
+    }
+
+    window.addEventListener('load', hideLoader);
+
+    // Safety timeout: force hide after 5 seconds if something hangs
+    setTimeout(hideLoader, 5000);
+</script>

@@ -16,9 +16,12 @@ const ticketsModal = document.getElementById('bookedTicketsModal');
 const accountModal = document.getElementById('accountModal');
 const openTicketsModalBtn = document.getElementById('openTicketsModalBtn');
 const openAccountModalBtn = document.getElementById('openAccountModalBtn');
+const openTicketsModalBtnMobile = document.getElementById('openTicketsModalBtnMobile');
+const openAccountModalBtnMobile = document.getElementById('openAccountModalBtnMobile');
 const closeTicketsModalBtn = document.querySelector('#bookedTicketsModal .close-btn');
 const closeAccountModalBtn = document.querySelector('.account-close');
 const logoutBtn = document.getElementById('logoutBtn');
+const logoutBtnMobile = document.getElementById('logoutBtnMobile');
 const bookNowBtn = document.getElementById('bookNowBtn');
 
 
@@ -66,40 +69,53 @@ if (menuBtn && sidebar && overlay) {
    LOGOUT FLOW
 ================================= */
 
-if (logoutBtn) {
+const logoutModal = document.getElementById('logoutModal');
+const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
+const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+const closeLogoutModalBtn = document.getElementById('closeLogoutModal');
+
+if (logoutBtn && logoutModal) {
     logoutBtn.addEventListener("click", (e) => {
         e.preventDefault();
-        // Show Confirmation Modal
-        if (confirmationModal) {
-            confirmationMessage.textContent = "Are you sure you want to logout?";
-            confirmationModal.style.display = 'block';
+        sidebar.classList.remove('active'); // Close sidebar
+        overlay.classList.remove('active');
+        logoutModal.style.display = 'flex'; // Show styled modal
+    });
+
+    if (logoutBtnMobile) {
+        logoutBtnMobile.addEventListener("click", (e) => {
+            e.preventDefault();
             sidebar.classList.remove('active'); // Close sidebar
             overlay.classList.remove('active');
+            logoutModal.style.display = 'flex'; // Show styled modal
+        });
+    }
 
-            // Set callback for YES
-            currentConfirmCallback = () => {
-                // Perform Logout via AJAX or Redirect
-                // For this requirement: "another pop telling him log out successfull"
-                // We'll do a fetch to logout, then show success modal.
-                fetch("/logout/")
-                    .then(() => {
-                        confirmationModal.style.display = 'none';
-                        if (logoutSuccessModal) {
-                            logoutSuccessModal.style.display = 'block';
-                        } else {
-                            window.location.href = "/users/login/";
-                        }
-                    })
-                    .catch(err => {
-                        console.error("Logout failed", err);
-                        window.location.href = "/users/login/";
-                    });
-            };
-        } else {
-            // Fallback
-            if (confirm("Are you sure you want to logout?")) {
-                window.location.href = "/logout/";
-            }
+    // Handle Cancel
+    if (cancelLogoutBtn) {
+        cancelLogoutBtn.addEventListener('click', () => {
+            logoutModal.style.display = 'none';
+        });
+    }
+
+    if (closeLogoutModalBtn) {
+        closeLogoutModalBtn.addEventListener('click', () => {
+            logoutModal.style.display = 'none';
+        });
+    }
+
+    // Handle Confirm Logout
+    if (confirmLogoutBtn) {
+        confirmLogoutBtn.addEventListener('click', () => {
+            // Perform Logout
+            window.location.href = "/logout/";
+        });
+    }
+
+    // Close on click outside
+    window.addEventListener('click', (event) => {
+        if (event.target === logoutModal) {
+            logoutModal.style.display = 'none';
         }
     });
 }
@@ -137,6 +153,7 @@ function renderBookedTickets() {
         const time = b.time || "";
         const seats = b.seats || "";
         const id = b.bookingId || b.id || "";
+        const ticketNumber = b.ticket_number || "N/A";
 
         item.innerHTML = `
             <div>
@@ -144,12 +161,18 @@ function renderBookedTickets() {
                 <p style="color:#c9a6ff;">
                     🗓️ Date: ${date} at ${time}<br>
                     🪑 Seats: ${seats}<br>
+                    🎫 Ticket: ${ticketNumber}<br>
                     #️⃣ ID: ${id}
                 </p>
-                <form action="/cancel-my-booking/${id}/" method="POST" class="cancel-form">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">
-                    <button type="submit" class="cancel-btn" style="margin-top: 10px;">Cancel Booking</button>
-                </form>
+                <div style="display: flex; gap: 10px; margin-top: 15px;">
+                    <a href="/download-ticket/${id}/" target="_blank" class="download-ticket-btn" style="flex: 1; text-align: center; padding: 10px; background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%); color: #1a1a2e; border: none; border-radius: 5px; text-decoration: none; font-weight: bold; cursor: pointer; transition: all 0.3s ease;">
+                        <i class="fas fa-download"></i> Download Ticket
+                    </a>
+                    <form action="/cancel-my-booking/${id}/" method="POST" class="cancel-form" style="flex: 1;">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="${getCookie('csrftoken')}">
+                        <button type="submit" class="cancel-btn" style="width: 100%; padding: 10px;">Cancel Booking</button>
+                    </form>
+                </div>
             </div>
         `;
 
@@ -189,8 +212,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 3. Initialize Modals & Event Listeners
+    // Desktop navigation link
     if (openTicketsModalBtn && ticketsModal) {
-        openTicketsModalBtn.addEventListener('click', () => {
+        openTicketsModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            renderBookedTickets();
+            ticketsModal.style.display = 'block';
+            sidebar?.classList.remove('active');
+            overlay?.classList.remove('active');
+        });
+    }
+
+    // Mobile sidebar button
+    if (openTicketsModalBtnMobile && ticketsModal) {
+        openTicketsModalBtnMobile.addEventListener('click', () => {
             renderBookedTickets();
             ticketsModal.style.display = 'block';
             sidebar?.classList.remove('active');
@@ -204,8 +239,19 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // Desktop navigation link
     if (openAccountModalBtn && accountModal) {
-        openAccountModalBtn.addEventListener('click', () => {
+        openAccountModalBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            accountModal.style.display = 'block';
+            sidebar?.classList.remove('active');
+            overlay?.classList.remove('active');
+        });
+    }
+
+    // Mobile sidebar button
+    if (openAccountModalBtnMobile && accountModal) {
+        openAccountModalBtnMobile.addEventListener('click', () => {
             accountModal.style.display = 'block';
             sidebar?.classList.remove('active');
             overlay?.classList.remove('active');

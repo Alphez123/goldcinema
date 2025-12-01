@@ -71,7 +71,7 @@ def register_view(request):
             messages.error(request, "⚠️ Email already registered.")
             return redirect("register")
 
-        CustomUser.objects.create_user(
+        user = CustomUser.objects.create_user(
             username=email,
             email=email,
             password=password,
@@ -82,11 +82,62 @@ def register_view(request):
             zip_code=zip_code,
             phone=phone,
         )
+        
+        # Set user as inactive until verified
+        user.is_active = False
+        user.save()
 
-        messages.success(request, "✅ Registration successful!")
-        return redirect("login")
+        # Send activation email
+        from .email_utils import send_registration_email
+        try:
+            if send_registration_email(user, request):
+                # Store email in session for the pending page
+                request.session['registration_email'] = email
+                return redirect("registration_pending")
+            else:
+                # If email fails, delete user and show error
+                user.delete()
+                messages.error(request, "❌ Failed to send verification email. Please try again.")
+                return redirect("register")
+        except Exception as e:
+            user.delete()
+            print(f"Failed to send registration email: {e}")
+            messages.error(request, "❌ An error occurred. Please try again.")
+            return redirect("register")
 
     return render(request, "register.html")
+
+
+def registration_pending(request):
+    """
+    Show page telling user to check their email
+    """
+    email = request.session.get('registration_email', 'your email')
+    return render(request, "registration_pending.html", {'email': email})
+
+
+def activate_account(request, uidb64, token):
+    """
+    Activate user account via email link
+    """
+    from django.contrib.auth.tokens import default_token_generator
+    from django.utils.http import urlsafe_base64_decode
+    from django.utils.encoding import force_str
+    
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = CustomUser.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        user.is_active = True
+        user.save()
+        messages.success(request, "✅ Account activated! You can now login.")
+        return redirect("login")
+    else:
+        messages.error(request, "❌ Activation link is invalid or has expired!")
+        return redirect("login")
 
 
 def login_view(request):
@@ -120,19 +171,17 @@ def logout_view(request):
 # HOMEPAGE / DASHBOARD
 # ============================================================
 
+from django.db.models import Q
+
 @login_required
 def homepage(request):
     # Filter movies by category
     all_movies = Movie.objects.all().order_by("-id")
     
-    # Case-insensitive filtering for robustness
-    movies_list = all_movies.filter(category__iexact="Movie")
-    concerts_list = all_movies.filter(category__iexact="Concert")
-    plays_list = all_movies.filter(category__iexact="Play") # Or "Plays" depending on admin input, using "Play" as per previous context
-
-    # Also support "Plays" plural if that's what's being saved
-    if not plays_list.exists():
-         plays_list = all_movies.filter(category__iexact="Plays")
+    # Case-insensitive filtering for robustness, handling singular and plural
+    movies_list = all_movies.filter(Q(category__iexact="Movie") | Q(category__iexact="Movies"))
+    concerts_list = all_movies.filter(Q(category__iexact="Concert") | Q(category__iexact="Concerts"))
+    plays_list = all_movies.filter(Q(category__iexact="Play") | Q(category__iexact="Plays"))
 
     user_bookings = Booking.objects.filter(user=request.user).order_by("-created_at")
 
@@ -143,6 +192,7 @@ def homepage(request):
             "time": b.time,
             "seats": b.seats,
             "id": b.id,
+            "ticket_number": b.ticket_number,
         }
         for b in user_bookings
     ]
@@ -327,7 +377,7 @@ def create_booking(request):
         request.user.save()
 
         # SAVE BOOKING
-        Booking.objects.create(
+        booking = Booking.objects.create(
             user=request.user,
             movie_name=movie,
             date=date,
@@ -341,6 +391,13 @@ def create_booking(request):
             message=f"Booking confirmed for {movie} on {date} at {time}. Seats: {seats}",
             notification_type="booking_success"
         )
+
+        # SEND EMAIL
+        from .email_utils import send_booking_confirmation_email
+        try:
+            send_booking_confirmation_email(request.user, booking)
+        except Exception as e:
+            print(f"Failed to send booking email: {e}")
 
         success_msg = f"Booking successful! 🎉 KSH {total_cost} deducted."
         if is_ajax:
@@ -370,6 +427,13 @@ def cancel_my_booking(request, booking_id):
             # Credit user balance
             request.user.balance += refund_amount
             request.user.save()
+
+        # Send cancellation email
+        from .email_utils import send_booking_cancellation_email
+        try:
+            send_booking_cancellation_email(request.user, booking)
+        except Exception as e:
+            print(f"Failed to send cancellation email: {e}")
 
         booking.delete()
         messages.success(request, f"Booking cancelled. KSH {refund_amount} has been refunded to your account. 🗑️")
@@ -406,10 +470,28 @@ def get_user_bookings(request):
         "date": b.date.strftime("%Y-%m-%d"),
         "time": b.time,
         "seats": b.seats,
-        "bookingId": b.id
+        "bookingId": b.id,
+        "ticket_number": b.ticket_number
     } for b in bookings]
 
     return JsonResponse({"bookings": booking_list})
+
+
+@login_required
+def download_ticket(request, booking_id):
+    """View to display/download a ticket"""
+    booking = get_object_or_404(Booking, id=booking_id, user=request.user)
+    
+    # Get movie details if available
+    movie = Movie.objects.filter(title=booking.movie_name).first()
+    
+    context = {
+        'booking': booking,
+        'movie': movie,
+        'user': request.user,
+    }
+    
+    return render(request, 'ticket.html', context)
 
 
 # ============================================================
@@ -728,6 +810,13 @@ def delete_account(request):
                     "error": "Incorrect password"
                 })
             
+            # Send deletion email
+            from .email_utils import send_account_deletion_email
+            try:
+                send_account_deletion_email(user)
+            except Exception as e:
+                print(f"Failed to send deletion email: {e}")
+
             # Log the user out
             logout(request)
             
@@ -801,3 +890,73 @@ def mark_notification_read(request, notification_id):
     notification.is_read = True
     notification.save()
     return JsonResponse({"success": True})
+
+
+# ============================================================
+# PASSWORD RESET
+# ============================================================
+
+def password_reset_request(request):
+    """
+    Handle password reset request - send email with reset link
+    """
+    if request.method == "POST":
+        email = request.POST.get("email")
+        
+        try:
+            user = CustomUser.objects.get(email=email)
+            
+            # Send password reset email
+            from .email_utils import send_password_reset_email
+            if send_password_reset_email(user, request):
+                messages.success(request, "✅ Password reset link sent! Check your email.")
+            else:
+                messages.error(request, "❌ Failed to send email. Please try again later.")
+                
+        except CustomUser.DoesNotExist:
+            # Don't reveal if email exists for security
+            messages.success(request, "✅ If that email exists, a reset link has been sent.")
+        
+        return redirect("login")
+    
+    return render(request, "password_reset_request.html")
+
+
+def password_reset_confirm(request, uidb64, token):
+    """
+    Validate token and show password reset form
+    """
+    from django.contrib.auth.tokens import default_token_generator
+    from django.utils.http import urlsafe_base64_decode
+    from django.utils.encoding import force_str
+    
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = CustomUser.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, CustomUser.DoesNotExist):
+        user = None
+    
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == "POST":
+            password1 = request.POST.get("password1")
+            password2 = request.POST.get("password2")
+            
+            if password1 != password2:
+                messages.error(request, "❌ Passwords don't match!")
+                return render(request, "password_reset_confirm.html", {"validlink": True})
+            
+            if len(password1) < 8:
+                messages.error(request, "❌ Password must be at least 8 characters!")
+                return render(request, "password_reset_confirm.html", {"validlink": True})
+            
+            # Set new password
+            user.set_password(password1)
+            user.save()
+            
+            messages.success(request, "✅ Password reset successful! You can now login.")
+            return redirect("login")
+        
+        return render(request, "password_reset_confirm.html", {"validlink": True})
+    else:
+        messages.error(request, "❌ Invalid or expired reset link!")
+        return render(request, "password_reset_confirm.html", {"validlink": False})

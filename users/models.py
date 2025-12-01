@@ -23,7 +23,17 @@ class Booking(models.Model):
     date = models.DateField()
     time = models.CharField(max_length=50)
     seats = models.CharField(max_length=200)  # Example: "A1, A2, A3"
+    ticket_number = models.CharField(max_length=20, unique=True, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.ticket_number:
+            # Generate unique ticket number: GC-YYYYMMDD-XXXXX
+            import datetime
+            date_str = datetime.datetime.now().strftime('%Y%m%d')
+            random_str = ''.join(random.choices(string.ascii_uppercase + string.digits, k=5))
+            self.ticket_number = f"GC-{date_str}-{random_str}"
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.user.email} - {self.movie_name} ({self.date} {self.time})"
@@ -37,6 +47,7 @@ class Movie(models.Model):
     poster = models.ImageField(upload_to="posters/", blank=True, null=True)
     price = models.DecimalField(max_digits=6, decimal_places=2, default=0.00)
     scheduled_date = models.DateTimeField(blank=True, null=True)
+    coming_soon = models.BooleanField(default=False, help_text="Mark this item as 'Coming Soon'")
 
     def __str__(self):
         return self.title

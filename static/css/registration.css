@@ -25,14 +25,17 @@ body {
   height: 100%;
   z-index: -1;
   background: radial-gradient(circle at center, #3a00b5 0%, #1a004d 100%);
-  background:radial-gradient(circle at center, #4b00d1 0%, #1a0065 100%);
-  background-image: 
+  background: radial-gradient(circle at center, #4b00d1 0%, #1a0065 100%);
+  background-image:
     linear-gradient(to right, rgba(0, 49, 183, 0.6), transparent),
     url("/static/images/cinema.jpg");
- /* path to your image */
-  background-size: cover;       /* makes the image fill the screen */
-  background-repeat: no-repeat; /* prevents tiling */
-  background-position: center;  /* centers the image */
+  /* path to your image */
+  background-size: cover;
+  /* makes the image fill the screen */
+  background-repeat: no-repeat;
+  /* prevents tiling */
+  background-position: center;
+  /* centers the image */
   background-attachment: fixed;
 }
 
@@ -63,7 +66,7 @@ body {
   margin: 20px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
     0 0 20px rgba(122, 51, 255, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -197,6 +200,7 @@ button[type="submit"]:hover {
 /* RESPONSIVENESS */
 /* ------------------------------ */
 @media (min-width: 600px) {
+
   .login-box,
   .register-box {
     width: auto;
@@ -207,6 +211,49 @@ button[type="submit"]:hover {
 @media (min-width: 900px) {
   .container {
     flex-direction: row;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 40px;
+  }
+
+  .login-box,
+  .register-box {
+    padding: 30px 20px;
+    margin: 10px 0;
+    border-radius: 12px;
+  }
+
+  .login-box h2,
+  .register-box h2 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="password"],
+  input[type="cities"],
+  select {
+    padding: 15px;
+    font-size: 16px;
+  }
+
+  button[type="submit"] {
+    padding: 15px 0;
+    font-size: 1.1rem;
+    margin-top: 30px;
+  }
+
+  .cta {
+    font-size: 1rem;
+    margin-top: 20px;
   }
 }
 
@@ -353,171 +400,231 @@ button[type="submit"]:hover {
    PRELOADER STYLES (Keep existing)
    ============================================================ */
 :root {
-    --n-dim: 4; /* 4x4 grid */
-    --n-total: 16; /* Total cubes */
-    --n-faces: 3;
-    --t-duration: 3.15s;
-    --edge-size: 2.75em;
-    --dist-offset: 0.75em;
-    --dist: calc(var(--edge-size) + var(--dist-offset));
-    --ripple-color: #276EFF; /* Default ripple color */
+  --n-dim: 4;
+  /* 4x4 grid */
+  --n-total: 16;
+  /* Total cubes */
+  --n-faces: 3;
+  --t-duration: 3.15s;
+  --edge-size: 2.75em;
+  --dist-offset: 0.75em;
+  --dist: calc(var(--edge-size) + var(--dist-offset));
+  --ripple-color: #276EFF;
+  /* Default ripple color */
 }
 
 /* --- Default/Base Theme (Gem Blue) variables --- */
 #colorWrapper {
-    /* Default variables for Gem Blue */
-    --theme-bg: rgb(12, 12, 20);
-    --cube-face-top: #101C28;
-    --cube-face-side-right: #2D59C8;
-    --cube-face-side-left: #10AAFF;
-    --cube-light-color: #1B2E6E;
-    --ripple-color: #10AAFF;
-    transition: background-color 0.35s ease-out;
+  /* Default variables for Gem Blue */
+  --theme-bg: rgb(12, 12, 20);
+  --cube-face-top: #101C28;
+  --cube-face-side-right: #2D59C8;
+  --cube-face-side-left: #10AAFF;
+  --cube-light-color: #1B2E6E;
+  --ripple-color: #10AAFF;
+  transition: background-color 0.35s ease-out;
 }
 
 /* --- Theme-Specific Overrides (If you plan to use the color switch buttons) --- */
 
 #colorWrapper.whtSlate {
-    --theme-bg: rgb(250, 252, 251);
-    --cube-face-top: #D0DAD9;
-    --cube-face-side-right: #B9C6C7;
-    --cube-face-side-left: #E4EDEC;
-    --cube-light-color: #D0DAD9;
-    --ripple-color: #B9C6C7;
+  --theme-bg: rgb(250, 252, 251);
+  --cube-face-top: #D0DAD9;
+  --cube-face-side-right: #B9C6C7;
+  --cube-face-side-left: #E4EDEC;
+  --cube-light-color: #D0DAD9;
+  --ripple-color: #B9C6C7;
 }
 
 #colorWrapper.honeyComb {
-    --theme-bg: rgb(250, 252, 251);
-    --cube-face-top: #FFF2D0;
-    --cube-face-side-right: #FFD792;
-    --cube-face-side-left: #FCB367;
-    --cube-light-color: #FFF8E4;
-    --ripple-color: #FFD792;
+  --theme-bg: rgb(250, 252, 251);
+  --cube-face-top: #FFF2D0;
+  --cube-face-side-right: #FFD792;
+  --cube-face-side-left: #FCB367;
+  --cube-light-color: #FFF8E4;
+  --ripple-color: #FFD792;
 }
 
 #colorWrapper.phosGreen-II {
-    --theme-bg: rgb(16, 18, 22);
-    --cube-face-top: #0A1819;
-    --cube-face-side-right: #102928;
-    --cube-face-side-left: #15f4c2;
-    --cube-light-color: #0d2c2f;
-    --ripple-color: #15f4c2;
+  --theme-bg: rgb(16, 18, 22);
+  --cube-face-top: #0A1819;
+  --cube-face-side-right: #102928;
+  --cube-face-side-left: #15f4c2;
+  --cube-light-color: #0d2c2f;
+  --ripple-color: #15f4c2;
 }
 
 #colorWrapper.gemBlue {
-    --theme-bg: rgb(12, 12, 20);
-    --cube-face-top: #101C28;
-    --cube-face-side-right: #2D59C8;
-    --cube-face-side-left: #10AAFF;
-    --cube-light-color: #1B2E6E;
-    --ripple-color: #10AAFF;
+  --theme-bg: rgb(12, 12, 20);
+  --cube-face-top: #101C28;
+  --cube-face-side-right: #2D59C8;
+  --cube-face-side-left: #10AAFF;
+  --cube-light-color: #1B2E6E;
+  --ripple-color: #10AAFF;
 }
 
 /* --- Preloader Overlay Styles (Crucial for fullscreen and z-index) --- */
 #colorWrapper {
-    background-color: var(--theme-bg);
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 100; /* Must be high to cover site content */
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.7s ease-in-out, visibility 0.7s ease-in-out;
+  background-color: var(--theme-bg);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  /* Must be high to cover site content */
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s ease-in-out, visibility 0.7s ease-in-out;
 }
 
 #colorWrapper.hidden {
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none; /* Crucial: allows clicks to pass through once hidden */
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  /* Crucial: allows clicks to pass through once hidden */
 }
 
 /* Ensure smooth transition for the filter on the site content */
 #siteContent {
-    transition: filter 0.5s ease-in-out;
+  transition: filter 0.5s ease-in-out;
 }
 
 /* --- 3D Grid Structure and Animation --- */
 .grid {
-    width: calc((var(--edge-size) * 4) + (0.5em * 3) + 0em); 
-    height: 6.25em; 
-    transform: rotateX(-35deg) rotateY(-45deg);
+  width: calc((var(--edge-size) * 4) + (0.5em * 3) + 0em);
+  height: 6.25em;
+  transform: rotateX(-35deg) rotateY(-45deg);
 }
 
-.grid, .grid * {
-    position: absolute;
-    top: 50%; 
-    left: 50%;
-    transform-style: preserve-3d;
+.grid,
+.grid * {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
 }
 
 .cube {
-    width: var(--edge-size);
-    height: var(--edge-size);
+  width: var(--edge-size);
+  height: var(--edge-size);
 }
 
 .cube__face {
-    width: var(--edge-size); 
-    height: var(--edge-size);
-    transition: background 0.35s ease-out;
-    position: absolute;
+  width: var(--edge-size);
+  height: var(--edge-size);
+  transition: background 0.35s ease-out;
+  position: absolute;
 }
 
 /* Top Face */
 .cube__face:nth-child(1) {
-    transform: rotateX(90deg) rotateY(0deg) translateZ(calc(0.5 * var(--edge-size)));
-    background: var(--cube-face-top);
-    animation: aniCL var(--t-duration) cubic-bezier(.4,0.2,.4,0.6) alternate infinite;
+  transform: rotateX(90deg) rotateY(0deg) translateZ(calc(0.5 * var(--edge-size)));
+  background: var(--cube-face-top);
+  animation: aniCL var(--t-duration) cubic-bezier(.4, 0.2, .4, 0.6) alternate infinite;
 }
 
 /* Right Face */
 .cube__face:nth-child(2) {
-    transform: rotateY(90deg) translateZ(calc(0.5 * var(--edge-size)));
-    background: var(--cube-face-side-right);
+  transform: rotateY(90deg) translateZ(calc(0.5 * var(--edge-size)));
+  background: var(--cube-face-side-right);
 }
 
 /* Left Face (Front) */
 .cube__face:nth-child(3) {
-    transform: translateZ(calc(0.5 * var(--edge-size)));
-    background: var(--cube-face-side-left);
+  transform: translateZ(calc(0.5 * var(--edge-size)));
+  background: var(--cube-face-side-left);
 }
 
 .lifter {
-    transform-origin: 0 calc(0.5 * var(--edge-size));
-    transform: scaleY(0);
-    animation: ani calc(var(--t-duration) / 4) cubic-bezier(.5,.1,.5,.9) alternate infinite;
+  transform-origin: 0 calc(0.5 * var(--edge-size));
+  transform: scaleY(0);
+  animation: ani calc(var(--t-duration) / 4) cubic-bezier(.5, .1, .5, .9) alternate infinite;
 }
 
 @keyframes ani {
-    0% { transform: scaleY(0); }
-    100% { transform: scaleY(0.533); }
+  0% {
+    transform: scaleY(0);
+  }
+
+  100% {
+    transform: scaleY(0.533);
+  }
 }
 
 @keyframes aniCL {
-    0% { background: var(--cube-light-color); }
-    100% { background: var(--cube-face-top); }
+  0% {
+    background: var(--cube-light-color);
+  }
+
+  100% {
+    background: var(--cube-face-top);
+  }
 }
 
 /* --- Cube Positioning (4x4 Grid) --- */
 
-.cube:nth-child(1) { transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(-1.5 * var(--dist))); }
-.cube:nth-child(2) { transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(-1.5 * var(--dist))); }
-.cube:nth-child(3) { transform: translate3d(calc(0.5 * var(--dist)), 0, calc(-1.5 * var(--dist))); }
-.cube:nth-child(4) { transform: translate3d(calc(1.5 * var(--dist)), 0, calc(-1.5 * var(--dist))); }
+.cube:nth-child(1) {
+  transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(-1.5 * var(--dist)));
+}
 
-.cube:nth-child(5) { transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(-0.5 * var(--dist))); }
-.cube:nth-child(6) { transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(-0.5 * var(--dist))); }
-.cube:nth-child(7) { transform: translate3d(calc(0.5 * var(--dist)), 0, calc(-0.5 * var(--dist))); }
-.cube:nth-child(8) { transform: translate3d(calc(1.5 * var(--dist)), 0, calc(-0.5 * var(--dist))); }
+.cube:nth-child(2) {
+  transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(-1.5 * var(--dist)));
+}
 
-.cube:nth-child(9) { transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(0.5 * var(--dist))); }
-.cube:nth-child(10) { transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(0.5 * var(--dist))); }
-.cube:nth-child(11) { transform: translate3d(calc(0.5 * var(--dist)), 0, calc(0.5 * var(--dist))); }
-.cube:nth-child(12) { transform: translate3d(calc(1.5 * var(--dist)), 0, calc(0.5 * var(--dist))); }
+.cube:nth-child(3) {
+  transform: translate3d(calc(0.5 * var(--dist)), 0, calc(-1.5 * var(--dist)));
+}
 
-.cube:nth-child(13) { transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(1.5 * var(--dist))); }
-.cube:nth-child(14) { transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(1.5 * var(--dist))); }
-.cube:nth-child(15) { transform: translate3d(calc(0.5 * var(--dist)), 0, calc(1.5 * var(--dist))); }
-.cube:nth-child(16) { transform: translate3d(calc(1.5 * var(--dist)), 0, calc(1.5 * var(--dist))); }
+.cube:nth-child(4) {
+  transform: translate3d(calc(1.5 * var(--dist)), 0, calc(-1.5 * var(--dist)));
+}
+
+.cube:nth-child(5) {
+  transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(-0.5 * var(--dist)));
+}
+
+.cube:nth-child(6) {
+  transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(-0.5 * var(--dist)));
+}
+
+.cube:nth-child(7) {
+  transform: translate3d(calc(0.5 * var(--dist)), 0, calc(-0.5 * var(--dist)));
+}
+
+.cube:nth-child(8) {
+  transform: translate3d(calc(1.5 * var(--dist)), 0, calc(-0.5 * var(--dist)));
+}
+
+.cube:nth-child(9) {
+  transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(0.5 * var(--dist)));
+}
+
+.cube:nth-child(10) {
+  transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(0.5 * var(--dist)));
+}
+
+.cube:nth-child(11) {
+  transform: translate3d(calc(0.5 * var(--dist)), 0, calc(0.5 * var(--dist)));
+}
+
+.cube:nth-child(12) {
+  transform: translate3d(calc(1.5 * var(--dist)), 0, calc(0.5 * var(--dist)));
+}
+
+.cube:nth-child(13) {
+  transform: translate3d(calc(-1.5 * var(--dist)), 0, calc(1.5 * var(--dist)));
+}
+
+.cube:nth-child(14) {
+  transform: translate3d(calc(-0.5 * var(--dist)), 0, calc(1.5 * var(--dist)));
+}
+
+.cube:nth-child(15) {
+  transform: translate3d(calc(0.5 * var(--dist)), 0, calc(1.5 * var(--dist)));
+}
+
+.cube:nth-child(16) {
+  transform: translate3d(calc(1.5 * var(--dist)), 0, calc(1.5 * var(--dist)));
+}
 
 
 /* --- Spiral Animation Delays --- */
@@ -527,22 +634,82 @@ button[type="submit"]:hover {
    9 10 11 12
   13 14 15 16
 */
-.cube:nth-child(6) .lifter, .cube:nth-child(6) .cube__face:nth-child(1) { animation-delay: 0.00s; }
-.cube:nth-child(7) .lifter, .cube:nth-child(7) .cube__face:nth-child(1) { animation-delay: 0.08s; }
-.cube:nth-child(11) .lifter, .cube:nth-child(11) .cube__face:nth-child(1) { animation-delay: 0.16s; }
-.cube:nth-child(10) .lifter, .cube:nth-child(10) .cube__face:nth-child(1) { animation-delay: 0.24s; }
+.cube:nth-child(6) .lifter,
+.cube:nth-child(6) .cube__face:nth-child(1) {
+  animation-delay: 0.00s;
+}
 
-.cube:nth-child(9) .lifter, .cube:nth-child(9) .cube__face:nth-child(1) { animation-delay: 0.32s; }
-.cube:nth-child(5) .lifter, .cube:nth-child(5) .cube__face:nth-child(1) { animation-delay: 0.40s; }
-.cube:nth-child(1) .lifter, .cube:nth-child(1) .cube__face:nth-child(1) { animation-delay: 0.48s; }
-.cube:nth-child(2) .lifter, .cube:nth-child(2) .cube__face:nth-child(1) { animation-delay: 0.56s; }
+.cube:nth-child(7) .lifter,
+.cube:nth-child(7) .cube__face:nth-child(1) {
+  animation-delay: 0.08s;
+}
 
-.cube:nth-child(3) .lifter, .cube:nth-child(3) .cube__face:nth-child(1) { animation-delay: 0.64s; }
-.cube:nth-child(4) .lifter, .cube:nth-child(4) .cube__face:nth-child(1) { animation-delay: 0.72s; }
-.cube:nth-child(8) .lifter, .cube:nth-child(8) .cube__face:nth-child(1) { animation-delay: 0.80s; }
-.cube:nth-child(12) .lifter, .cube:nth-child(12) .cube__face:nth-child(1) { animation-delay: 0.88s; }
+.cube:nth-child(11) .lifter,
+.cube:nth-child(11) .cube__face:nth-child(1) {
+  animation-delay: 0.16s;
+}
 
-.cube:nth-child(16) .lifter, .cube:nth-child(16) .cube__face:nth-child(1) { animation-delay: 0.96s; }
-.cube:nth-child(15) .lifter, .cube:nth-child(15) .cube__face:nth-child(1) { animation-delay: 1.04s; }
-.cube:nth-child(14) .lifter, .cube:nth-child(14) .cube__face:nth-child(1) { animation-delay: 1.12s; }
-.cube:nth-child(13) .lifter, .cube:nth-child(13) .cube__face:nth-child(1) { animation-delay: 1.20s; }
+.cube:nth-child(10) .lifter,
+.cube:nth-child(10) .cube__face:nth-child(1) {
+  animation-delay: 0.24s;
+}
+
+.cube:nth-child(9) .lifter,
+.cube:nth-child(9) .cube__face:nth-child(1) {
+  animation-delay: 0.32s;
+}
+
+.cube:nth-child(5) .lifter,
+.cube:nth-child(5) .cube__face:nth-child(1) {
+  animation-delay: 0.40s;
+}
+
+.cube:nth-child(1) .lifter,
+.cube:nth-child(1) .cube__face:nth-child(1) {
+  animation-delay: 0.48s;
+}
+
+.cube:nth-child(2) .lifter,
+.cube:nth-child(2) .cube__face:nth-child(1) {
+  animation-delay: 0.56s;
+}
+
+.cube:nth-child(3) .lifter,
+.cube:nth-child(3) .cube__face:nth-child(1) {
+  animation-delay: 0.64s;
+}
+
+.cube:nth-child(4) .lifter,
+.cube:nth-child(4) .cube__face:nth-child(1) {
+  animation-delay: 0.72s;
+}
+
+.cube:nth-child(8) .lifter,
+.cube:nth-child(8) .cube__face:nth-child(1) {
+  animation-delay: 0.80s;
+}
+
+.cube:nth-child(12) .lifter,
+.cube:nth-child(12) .cube__face:nth-child(1) {
+  animation-delay: 0.88s;
+}
+
+.cube:nth-child(16) .lifter,
+.cube:nth-child(16) .cube__face:nth-child(1) {
+  animation-delay: 0.96s;
+}
+
+.cube:nth-child(15) .lifter,
+.cube:nth-child(15) .cube__face:nth-child(1) {
+  animation-delay: 1.04s;
+}
+
+.cube:nth-child(14) .lifter,
+.cube:nth-child(14) .cube__face:nth-child(1) {
+  animation-delay: 1.12s;
+}
+
+.cube:nth-child(13) .lifter,
+.cube:nth-child(13) .cube__face:nth-child(1) {
+  animation-delay: 1.20s;
+}

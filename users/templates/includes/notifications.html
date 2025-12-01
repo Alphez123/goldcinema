@@ -7,7 +7,12 @@
         <span id="notificationCount" class="badge">0</span>
     </button>
     <div id="notificationDropdown" class="dropdown-content">
-        <p class="dropdown-header">Notifications</p>
+        <div class="dropdown-header-container"
+            style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
+            <p class="dropdown-header" style="margin: 0;">Notifications</p>
+            <span id="closeNotificationDropdown" class="close-btn-mobile"
+                style="display: none; cursor: pointer; color: #aaa;">&times;</span>
+        </div>
         <div id="notificationList">
             <p class="empty-message">No new notifications.</p>
         </div>

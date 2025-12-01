@@ -10,44 +10,79 @@
   <link rel="stylesheet" href="{% static 'css/home-page.css' %}">
   <link rel="stylesheet" href="{% static 'css/notification-modal.css' %}">
   <link rel="stylesheet" href="{% static 'css/account-modal.css' %}">
+  <link rel="stylesheet" href="{% static 'css/loader.css' %}">
 
 </head>
 
 <body>
+  {% include 'includes/loader.html' %}
   {% include 'includes/notifications.html' %}
   <div class="sidebar" id="sidebar">
     <h2><i class="fas fa-film"></i> Menu</h2>
-    <div class="funds-section" style=" background: rgba(255, 255, 255, 0.05); border-radius: 10px;">
-      <h3 style="color: #ffd700; font-size: 1.1em; margin-bottom: 10px;">My Funds</h3>
+
+    <!-- My Funds Section -->
+    <div class="funds-section"
+      style="background: rgba(255, 255, 255, 0.05); border-radius: 10px; padding: 15px; margin-bottom: 15px;">
+      <h3 style="color: #ffd700; font-size: 1.1em; margin-bottom: 10px;"><i class="fas fa-wallet"></i> My Funds</h3>
       <p style="color: #fff; font-size: 1.2em; font-weight: bold; margin-bottom: 15px;">
-        KSH <span id="userBalance">{{ user.balance }}</span>
+        KSH <span id="userBalanceSidebar">{{ user.balance }}</span>
       </p>
-      <button class="menubtn" id="openDepositModalBtn" disabled
-        style="background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; margin-bottom: 10px; opacity: 0.5; cursor: not-allowed;">
+      <button class="menubtn" id="openDepositModalBtnSidebar" disabled
+        style="background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; margin-bottom: 10px; opacity: 0.5; cursor: not-allowed; width: 100%;">
         <i class="fas fa-plus-circle"></i> Deposit Funds (Coming Soon)
       </button>
-
-      <button class="menubtn" id="openAccountModalBtn">My Account</button>
-      <button class="menubtn" id="openTicketsModalBtn">My Tickets</button>
     </div>
 
-    <button class="menubtn" id="logoutBtn" style="margin-top: auto;">Logout</button>
+    <!-- Menu Buttons -->
+    <button class="menubtn" id="openAccountModalBtnMobile"><i class="fas fa-user-circle"></i> My Account</button>
+    <button class="menubtn" id="openTicketsModalBtnMobile"><i class="fas fa-ticket-alt"></i> My Tickets</button>
+    <button class="menubtn" id="openNotificationsBtnMobile"><i class="fas fa-bell"></i> Notifications</button>
+    <button class="menubtn" id="logoutBtnMobile"
+      style="margin-top: auto; background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3);">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </button>
   </div>
 
   <div class="overlay" id="overlay"></div>
 
   <nav>
     <div class="logo">Gold Cinema</div>
+
+    <div class="search-bar desktop-only">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="search-input" placeholder="Search movies, events...">
+    </div>
+
     <ul>
       <li><a href="#movies">Movies</a></li>
       <li><a href="#concerts">Concerts</a></li>
       <li><a href="#plays">Plays</a></li>
+      <li class="desktop-only"><a href="#" id="openAccountModalBtn"><i class="fas fa-user-circle"></i> My Account</a>
+      </li>
+      <li class="desktop-only"><a href="#" id="openTicketsModalBtn"><i class="fas fa-ticket-alt"></i> My Tickets</a>
+      </li>
     </ul>
     <i class="fas fa-bars menu-btn" id="menu-btn"></i>
   </nav>
 
+
   <section id="hero" class="hero">
     <h1>Hi, {{ user.first_name|default:user.username }}! Welcome to Gold Cinema Ticket Booking</h1>
+
+    <div class="hero-features">
+      <div class="hero-feature-tag">
+        <i class="fas fa-video"></i> 4K Ultra HD
+      </div>
+      <div class="hero-feature-tag">
+        <i class="fas fa-volume-up"></i> Dolby Atmos
+      </div>
+      <div class="hero-feature-tag">
+        <i class="fas fa-couch"></i> Recliner Seats
+      </div>
+      <div class="hero-feature-tag">
+        <i class="fas fa-wifi"></i> Free Wi-Fi
+      </div>
+    </div>
     <p>Experience movies, plays, and concerts like never before — luxury, sound, and the magic of the big
       screen.</p>
     <button id="bookNowBtn" class="button">Book Now</button>
@@ -134,7 +169,325 @@
 
   </section>
 
-  <footer>© 2025 Gold Cinema. All rights reserved.</footer>
+  <!-- =========================
+     WHY CHOOSE US SECTION
+  ========================= -->
+  <section id="features"
+    style="background: rgba(255, 215, 0, 0.03); border-top: 1px solid rgba(255, 215, 0, 0.1); border-bottom: 1px solid rgba(255, 215, 0, 0.1);">
+    <h2>Why Choose Gold Cinema?</h2>
+    <div class="features-grid"
+      style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2em; margin-top: 2em;">
+      <div class="feature-card"
+        style="background: rgba(255, 255, 255, 0.05); padding: 2em; border-radius: 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+        <div style="font-size: 3em; color: #ffd700; margin-bottom: 0.5em;">
+          <i class="fas fa-couch"></i>
+        </div>
+        <h3 style="color: #ffd700; margin-bottom: 0.5em;">Premium Seating</h3>
+        <p style="color: #e0e0e0; line-height: 1.6;">Luxurious reclining seats with ample legroom for maximum comfort
+        </p>
+      </div>
+      <div class="feature-card"
+        style="background: rgba(255, 255, 255, 0.05); padding: 2em; border-radius: 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+        <div style="font-size: 3em; color: #ffd700; margin-bottom: 0.5em;">
+          <i class="fas fa-film"></i>
+        </div>
+        <h3 style="color: #ffd700; margin-bottom: 0.5em;">Latest Releases</h3>
+        <p style="color: #e0e0e0; line-height: 1.6;">Watch the newest blockbusters on the day of release</p>
+      </div>
+      <div class="feature-card"
+        style="background: rgba(255, 255, 255, 0.05); padding: 2em; border-radius: 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+        <div style="font-size: 3em; color: #ffd700; margin-bottom: 0.5em;">
+          <i class="fas fa-volume-up"></i>
+        </div>
+        <h3 style="color: #ffd700; margin-bottom: 0.5em;">Dolby Atmos Sound</h3>
+        <p style="color: #e0e0e0; line-height: 1.6;">Immersive audio experience that puts you in the action</p>
+      </div>
+      <div class="feature-card"
+        style="background: rgba(255, 255, 255, 0.05); padding: 2em; border-radius: 16px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.3s ease;">
+        <div style="font-size: 3em; color: #ffd700; margin-bottom: 0.5em;">
+          <i class="fas fa-mobile-alt"></i>
+        </div>
+        <h3 style="color: #ffd700; margin-bottom: 0.5em;">Easy Booking</h3>
+        <p style="color: #e0e0e0; line-height: 1.6;">Book your tickets online in seconds with our seamless system</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+     COMING SOON SECTION
+  ========================= -->
+  <section id="coming-soon">
+    <h2>Coming Soon</h2>
+    <div class="movie-grid">
+      <div class="movie" style="position: relative; overflow: hidden;">
+        <div style="position: relative;">
+          <img src="{% static 'images/other-movies.jpg' %}" alt="Coming Soon" style="filter: brightness(0.7);">
+          <div
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; width: 100%;">
+            <i class="fas fa-clock" style="font-size: 3em; color: #ffd700; margin-bottom: 0.5em;"></i>
+            <h3 style="color: #fff; font-size: 1.5em;">More Exciting Shows</h3>
+            <p style="color: #ffd700;">Stay Tuned!</p>
+          </div>
+        </div>
+        <div class="movie-info">
+          <h3>Upcoming Releases</h3>
+          <p>Check back soon for new additions</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================
+     ENHANCED FOOTER
+  ========================= -->
+  <footer
+    style="background: linear-gradient(135deg, rgba(15, 12, 41, 0.95), rgba(48, 43, 99, 0.95)); padding: 3em 2em 1em; margin-top: 4em; border-top: 2px solid rgba(255, 215, 0, 0.3);">
+    <div style="max-width: 1200px; margin: 0 auto;">
+      <div
+        style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2em; margin-bottom: 2em;">
+        <!-- About Section -->
+        <div>
+          <h3 style="color: #ffd700; margin-bottom: 1em; font-size: 1.3em;">
+            <i class="fas fa-film"></i> Gold Cinema
+          </h3>
+          <p style="color: #e0e0e0; line-height: 1.8; margin-bottom: 1em;">
+            Experience the magic of cinema with premium comfort, cutting-edge technology, and unforgettable moments.
+          </p>
+          <div style="display: flex; gap: 1em; margin-top: 1em;">
+            <a href="#" style="color: #ffd700; font-size: 1.5em; transition: all 0.3s ease;"
+              onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+              <i class="fab fa-facebook"></i>
+            </a>
+            <a href="#" style="color: #ffd700; font-size: 1.5em; transition: all 0.3s ease;"
+              onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+              <i class="fab fa-twitter"></i>
+            </a>
+            <a href="#" style="color: #ffd700; font-size: 1.5em; transition: all 0.3s ease;"
+              onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+              <i class="fab fa-instagram"></i>
+            </a>
+            <a href="#" style="color: #ffd700; font-size: 1.5em; transition: all 0.3s ease;"
+              onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">
+              <i class="fab fa-youtube"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 style="color: #ffd700; margin-bottom: 1em; font-size: 1.3em;">Quick Links</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.8em;">
+              <a href="#movies" style="color: #e0e0e0; text-decoration: none; transition: all 0.3s ease;"
+                onmouseover="this.style.color='#ffd700'; this.style.paddingLeft='10px'"
+                onmouseout="this.style.color='#e0e0e0'; this.style.paddingLeft='0'">
+                <i class="fas fa-chevron-right" style="margin-right: 0.5em; font-size: 0.8em;"></i> Movies
+              </a>
+            </li>
+            <li style="margin-bottom: 0.8em;">
+              <a href="#concerts" style="color: #e0e0e0; text-decoration: none; transition: all 0.3s ease;"
+                onmouseover="this.style.color='#ffd700'; this.style.paddingLeft='10px'"
+                onmouseout="this.style.color='#e0e0e0'; this.style.paddingLeft='0'">
+                <i class="fas fa-chevron-right" style="margin-right: 0.5em; font-size: 0.8em;"></i> Concerts
+              </a>
+            </li>
+            <li style="margin-bottom: 0.8em;">
+              <a href="#plays" style="color: #e0e0e0; text-decoration: none; transition: all 0.3s ease;"
+                onmouseover="this.style.color='#ffd700'; this.style.paddingLeft='10px'"
+                onmouseout="this.style.color='#e0e0e0'; this.style.paddingLeft='0'">
+                <i class="fas fa-chevron-right" style="margin-right: 0.5em; font-size: 0.8em;"></i> Plays
+              </a>
+            </li>
+            <li style="margin-bottom: 0.8em;">
+              <a href="#features" style="color: #e0e0e0; text-decoration: none; transition: all 0.3s ease;"
+                onmouseover="this.style.color='#ffd700'; this.style.paddingLeft='10px'"
+                onmouseout="this.style.color='#e0e0e0'; this.style.paddingLeft='0'">
+                <i class="fas fa-chevron-right" style="margin-right: 0.5em; font-size: 0.8em;"></i> Why Choose Us
+              </a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+          <h3 style="color: #ffd700; margin-bottom: 1em; font-size: 1.3em;">Contact Us</h3>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 0.8em; color: #e0e0e0;">
+              <i class="fas fa-map-marker-alt" style="color: #ffd700; margin-right: 0.5em;"></i>
+              123 Cinema Street, Nairobi
+            </li>
+            <li style="margin-bottom: 0.8em; color: #e0e0e0;">
+              <i class="fas fa-phone" style="color: #ffd700; margin-right: 0.5em;"></i>
+              +254 700 000 000
+            </li>
+            <li style="margin-bottom: 0.8em; color: #e0e0e0;">
+              <i class="fas fa-envelope" style="color: #ffd700; margin-right: 0.5em;"></i>
+              info@goldcinema.com
+            </li>
+            <li style="margin-bottom: 0.8em; color: #e0e0e0;">
+              <i class="fas fa-clock" style="color: #ffd700; margin-right: 0.5em;"></i>
+              Open Daily: 10 AM - 11 PM
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Copyright Section with Enhanced Styling -->
+      <div style="border-top: 1px solid rgba(255, 215, 0, 0.2); padding-top: 2em; margin-top: 2em;">
+        <div style="text-align: center; position: relative;">
+          <div
+            style="background: linear-gradient(90deg, #ffd700, #ffed4e, #ffd700); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 1.1em; font-weight: 600; margin-bottom: 0.5em; animation: shimmer 3s infinite;">
+            <i class="fas fa-crown" style="-webkit-text-fill-color: #ffd700;"></i>
+            © 2025 Gold Cinema. All Rights Reserved.
+          </div>
+          <p style="color: #b0b0b0; font-size: 0.9em; margin-top: 0.5em;">
+            Crafted with <i class="fas fa-heart" style="color: #ff4d4d; animation: heartbeat 1.5s infinite;"></i> for
+            Movie Lovers
+          </p>
+          <div style="margin-top: 1em; font-size: 0.85em; color: #999;">
+            <a href="#" style="color: #999; text-decoration: none; margin: 0 1em; transition: color 0.3s;"
+              onmouseover="this.style.color='#ffd700'" onmouseout="this.style.color='#999'">Privacy Policy</a>
+            <span style="color: #555;">|</span>
+            <a href="#" style="color: #999; text-decoration: none; margin: 0 1em; transition: color 0.3s;"
+              onmouseover="this.style.color='#ffd700'" onmouseout="this.style.color='#999'">Terms of Service</a>
+            <span style="color: #555;">|</span>
+            <a href="#" style="color: #999; text-decoration: none; margin: 0 1em; transition: color 0.3s;"
+              onmouseover="this.style.color='#ffd700'" onmouseout="this.style.color='#999'">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <style>
+    @keyframes shimmer {
+
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+    }
+
+    @keyframes heartbeat {
+
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      25% {
+        transform: scale(1.2);
+      }
+
+      50% {
+        transform: scale(1);
+      }
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 215, 0, 0.1) !important;
+      border-color: rgba(255, 215, 0, 0.3) !important;
+      box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      /* Enhanced Mobile Navigation */
+    nav {
+        flex-direction: column;
+        padding: 1.2rem 1.5rem;
+        gap: 1.2rem;
+        background: rgba(15, 12, 41, 0.98);
+        backdrop-filter: blur(20px);
+        border-bottom: 2px solid rgba(255, 215, 0, 0.2);
+        position: sticky;
+        top: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo {
+        text-align: center;
+        font-size: 1.6rem;
+        letter-spacing: 1px;
+    }
+
+    .nav-links {
+        width: 100%;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .nav-links a {
+        padding: 12px 20px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:active {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: rgba(255, 215, 0, 0.4);
+        transform: translateX(5px);
+    }
+
+    .nav-links .btn-primary {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.25), rgba(255, 170, 0, 0.25)) !important;
+        border: 2px solid rgba(255, 215, 0, 0.6) !important;
+        font-weight: 700;
+        box-shadow: 0 4px 15px rgba(255, 215, 0, 0.2) !important;
+        padding: 14px 20px !important;
+    }
+
+    .nav-links .btn-primary:hover {
+        background: linear-gradient(135deg, rgba(255, 215, 0, 0.4), rgba(255, 170, 0, 0.4)) !important;
+        box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4) !important;
+        transform: translateY(-2px) !important;
+    }
+
+    /* Hero Section */
+    h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content {
+        padding: 0 10px;
+    }
+
+    .cta-buttons {
+        flex-direction: column;
+    }
+
+    /* Carousel */
+    .carousel-item {
+        flex: 0 0 250px;
+    }
+
+    .carousel-item-image {
+        height: 350px;
+    }
+
+    .carousel-header h2 {
+        font-size: 2rem;
+    }
+}
+      footer>div>div {
+        grid-template-columns: 1fr !important;
+        text-align: center;
+      }
+
+      footer ul {
+        text-align: left;
+        display: inline-block;
+      }
+    
+  </style>
 
   <!-- Tickets Booked Modal -->
   <div id="bookedTicketsModal" class="modal">
@@ -186,6 +539,19 @@
             </span>
           </div>
 
+          <!-- My Funds Section -->
+          <div class="account-field"
+            style="background: rgba(255, 215, 0, 0.05); border-left: 4px solid #ffd700; padding: 15px; border-radius: 8px; margin-top: 15px;">
+            <label style="color: #ffd700; font-weight: 600;"><i class="fas fa-wallet"></i> My Balance:</label>
+            <span style="font-size: 1.3em; color: #ffd700; font-weight: bold;">
+              KSH <span id="userBalanceModal">{{ user.balance }}</span>
+            </span>
+            <button class="menubtn" id="openDepositModalBtn" disabled
+              style="background: rgba(76, 175, 80, 0.2); border: 1px solid #4caf50; color: #4caf50; margin-top: 10px; opacity: 0.5; cursor: not-allowed; width: 100%;">
+              <i class="fas fa-plus-circle"></i> Deposit Funds (Coming Soon)
+            </button>
+          </div>
+
         </div>
 
         <div class="account-actions">
@@ -197,6 +563,10 @@
           </button>
           <button id="deleteAccountBtn" class="action-btn delete-btn">
             <i class="fas fa-trash-alt"></i> Delete Account
+          </button>
+          <button id="logoutBtn" class="action-btn"
+            style="background: rgba(255, 77, 77, 0.1); color: #ff4d4d; border: 1px solid rgba(255, 77, 77, 0.3);">
+            <i class="fas fa-sign-out-alt"></i> Logout
           </button>
         </div>
       </div>
@@ -346,13 +716,14 @@
 
   <!-- Logout Confirmation Modal -->
   <div id="logoutModal" class="modal">
-    <div class="modal-content" style="text-align: center; max-width: 400px;">
-      <span class="close-btn" id="closeLogoutModal">&times;</span>
-      <h2 style="color: #ff4d4d;"><i class="fas fa-sign-out-alt"></i> Logout</h2>
-      <p style="color: #e0e0e0; margin: 20px 0;">Are you sure you want to logout?</p>
-      <div style="display: flex; gap: 15px; justify-content: center;">
-        <button id="cancelLogoutBtn" class="action-btn"
-          style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2);">Cancel</button>
+    <div class="modal-content notification-modal">
+      <div class="notification-icon" style="color: #ff4d4d;">
+        <i class="fas fa-sign-out-alt"></i>
+      </div>
+      <h2 style="color: #ff4d4d;">Logout</h2>
+      <p>Are you sure you want to logout?</p>
+      <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+        <button id="cancelLogoutBtn" class="action-btn" style="background: rgba(255, 255, 255, 0.1);">Cancel</button>
         <button id="confirmLogoutBtn" class="action-btn delete-btn">Logout</button>
       </div>
     </div>

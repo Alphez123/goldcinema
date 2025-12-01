@@ -15,6 +15,14 @@ urlpatterns = [
     path("users/register/", user_views.register_view, name="register"),
     path("users/login/", user_views.login_view, name="login"),
     path("logout/", user_views.logout_view, name="logout"),
+    
+    # Account Activation
+    path("activate/<uidb64>/<token>/", user_views.activate_account, name="activate"),
+    path("registration-pending/", user_views.registration_pending, name="registration_pending"),
+    
+    # Password Reset
+    path("forgot-password/", user_views.password_reset_request, name="password_reset_request"),
+    path("reset-password/<uidb64>/<token>/", user_views.password_reset_confirm, name="password_reset_confirm"),
 
     # ==========================
     # USER HOME / DASHBOARD
@@ -34,6 +42,7 @@ urlpatterns = [
     # AJAX API
     path("api/bookings/", user_views.get_user_bookings, name="get_bookings"),
     path("api/booked-seats/<str:movie_name>/", user_views.get_booked_seats, name="get_booked_seats"),
+    path("download-ticket/<int:booking_id>/", user_views.download_ticket, name="download_ticket"),
 
     # ==========================
     # ACCOUNT PAGE

@@ -26,6 +26,8 @@ ALLOWED_HOSTS = [
     os.environ.get('RENDER_EXTERNAL_HOSTNAME', ''),
     'localhost',
     '127.0.0.1',
+    '192.168.1.124',
+    '192.168.1.137',
 ]
 
 # ============================================================
@@ -135,6 +137,29 @@ MEDIA_ROOT = BASE_DIR / "media"
 LOGIN_REDIRECT_URL = '/homepage/'
 LOGIN_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
+
+# ============================================================
+# EMAIL CONFIGURATION
+# ============================================================
+# Email backend configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# SMTP Server settings
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')  # Change if using different provider
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False') == 'True'
+
+# SMTP Authentication
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'goldcinematheatre@gmail.com')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # Your SMTP password
+
+# Default sender email
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Gold Cinema <goldcinematheatre@gmail.com>')
+SERVER_EMAIL = DEFAULT_FROM_EMAIL
+
+# Email timeout (in seconds)
+EMAIL_TIMEOUT = 10
 
 # ============================================================
 # PRODUCTION SECURITY

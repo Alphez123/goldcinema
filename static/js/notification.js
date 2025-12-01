@@ -4,7 +4,12 @@ document.addEventListener('DOMContentLoaded', function () {
     const notificationList = document.getElementById('notificationList');
     const notificationCount = document.getElementById('notificationCount');
 
-    // Toggle dropdown
+    const openNotificationsBtnMobile = document.getElementById('openNotificationsBtnMobile');
+    const closeNotificationDropdown = document.getElementById('closeNotificationDropdown');
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('overlay');
+
+    // Toggle dropdown (Desktop)
     if (notificationBtn) {
         notificationBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -12,10 +17,33 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // Open dropdown (Mobile Sidebar)
+    if (openNotificationsBtnMobile) {
+        openNotificationsBtnMobile.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notificationDropdown.classList.add('show');
+            // Close sidebar
+            if (sidebar) sidebar.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+        });
+    }
+
+    // Close dropdown (Mobile Close Button)
+    if (closeNotificationDropdown) {
+        closeNotificationDropdown.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notificationDropdown.classList.remove('show');
+        });
+    }
+
     // Close dropdown when clicking outside
     document.addEventListener('click', (e) => {
         if (notificationDropdown && notificationDropdown.classList.contains('show')) {
-            if (!notificationDropdown.contains(e.target) && !notificationBtn.contains(e.target)) {
+            // On mobile, clicking outside (on the backdrop if any, or just body) should close it
+            // But we need to be careful not to close it immediately if we just opened it
+            if (!notificationDropdown.contains(e.target) &&
+                (!notificationBtn || !notificationBtn.contains(e.target)) &&
+                (!openNotificationsBtnMobile || !openNotificationsBtnMobile.contains(e.target))) {
                 notificationDropdown.classList.remove('show');
             }
         }

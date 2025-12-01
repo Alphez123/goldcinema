@@ -14,15 +14,18 @@ body {
   font-family: "Poppins", sans-serif;
   color: #fff;
   background: radial-gradient(circle at center, #3a00b5 0%, #1a004d 100%);
-  background:radial-gradient(circle at center, #4b00d1 0%, #1a0065 100%);
-  background-image: 
+  background: radial-gradient(circle at center, #4b00d1 0%, #1a0065 100%);
+  background-image:
     linear-gradient(to right, rgba(0, 49, 183, 0.6), transparent),
     url("/static/images/cinema.jpg");
 
- /* path to your image */
-  background-size: cover;       /* makes the image fill the screen */
-  background-repeat: no-repeat; /* prevents tiling */
-  background-position: center;  /* centers the image */
+  /* path to your image */
+  background-size: cover;
+  /* makes the image fill the screen */
+  background-repeat: no-repeat;
+  /* prevents tiling */
+  background-position: center;
+  /* centers the image */
   background-attachment: fixed;
 }
 
@@ -52,7 +55,7 @@ body {
   margin: 20px;
   width: 100%;
   max-width: 400px;
-  box-shadow: 
+  box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.3),
     0 0 20px rgba(122, 51, 255, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -102,28 +105,28 @@ body {
 /* FORM ELEMENTS */
 /* ------------------------------ */
 .password-container {
-    position: relative;
-    width: 100%;
+  position: relative;
+  width: 100%;
 }
 
 .password-input {
-    width: 100%;
-    padding-right: 35px;
-    box-sizing: border-box;
+  width: 100%;
+  padding-right: 35px;
+  box-sizing: border-box;
 }
 
 .password-toggle {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
-    user-select: none;
-    background: transparent;
-    border: none;
-    font-size: 16px;
-    color: #fff;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  user-select: none;
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 form {
@@ -223,6 +226,7 @@ button[type="submit"]:hover,
 /* RESPONSIVE DESIGN */
 /* ------------------------------ */
 @media (min-width: 600px) {
+
   .login-box,
   .register-box {
     width: auto;
@@ -232,6 +236,53 @@ button[type="submit"]:hover,
 @media (min-width: 900px) {
   .container {
     flex-direction: row;
+  }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 600px) {
+  .container {
+    padding: 10px;
+    align-items: flex-start;
+    /* Align to top on mobile */
+    padding-top: 40px;
+  }
+
+  .login-box,
+  .register-box {
+    padding: 30px 20px;
+    margin: 10px 0;
+    border-radius: 12px;
+  }
+
+  .login-box h2,
+  .register-box h2 {
+    font-size: 1.8em;
+    margin-bottom: 25px;
+  }
+
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    padding: 15px;
+    /* Larger touch target */
+    font-size: 16px;
+    /* Prevent zoom on iOS */
+  }
+
+  button[type="submit"],
+  .button {
+    padding: 15px 0;
+    font-size: 1.1rem;
+    margin-top: 30px;
+  }
+
+  .back-link {
+    margin-bottom: 15px;
+    font-size: 1rem;
+    padding: 10px 0;
+    /* Easier to tap */
+    display: block;
   }
 }
 

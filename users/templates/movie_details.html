@@ -9,16 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* General Styles */
+        /* General Styles */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            background-image:
-                linear-gradient(to right, rgba(15, 12, 41, 0.8), rgba(36, 36, 62, 0.8)),
-                url("/static/images/cinema.jpg");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-attachment: fixed;
-            background-size: cover;
+            background: #0f0c29;
+            /* Fallback */
             color: #fff;
             margin: 0;
             padding: 0;
@@ -26,6 +21,22 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .dynamic-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("{{ movie_poster }}");
+            background-size: cover;
+            background-position: center;
+            filter: blur(8px) brightness(0.4);
+            z-index: -1;
+            transform: scale(1.1);
+            /* Prevent blur edges */
         }
 
         .container {
@@ -294,6 +305,7 @@
 </head>
 
 <body>
+    <div class="dynamic-background"></div>
     {% include 'includes/notifications.html' %}
     <div class="container">
         <div class="movie-poster">
@@ -334,26 +346,9 @@
                 {% csrf_token %}
                 <input type="hidden" name="movie_name" value="{{ movie_name }}">
 
-                <div class="seat-map">
+                <div class="seat-map" id="seatMapContainer">
                     <label style="margin-bottom: 10px;">Select Seats</label>
-                    <div class="seat-row">
-                        <div class="seat" data-seat="A1">A1</div>
-                        <div class="seat" data-seat="A2">A2</div>
-                        <div class="seat" data-seat="A3">A3</div>
-                        <div class="seat" data-seat="A4">A4</div>
-                    </div>
-                    <div class="seat-row">
-                        <div class="seat" data-seat="B1">B1</div>
-                        <div class="seat" data-seat="B2">B2</div>
-                        <div class="seat" data-seat="B3">B3</div>
-                        <div class="seat" data-seat="B4">B4</div>
-                    </div>
-                    <div class="seat-row">
-                        <div class="seat" data-seat="C1">C1</div>
-                        <div class="seat" data-seat="C2">C2</div>
-                        <div class="seat" data-seat="C3">C3</div>
-                        <div class="seat" data-seat="C4">C4</div>
-                    </div>
+                    <div id="seatsGrid"></div>
                 </div>
                 <input type="hidden" id="selected_seats" name="selected_seats">
 
@@ -549,16 +544,47 @@
                 });
             }
 
-            const seats = document.querySelectorAll(".seat");
-            seats.forEach(seat => {
-                seat.addEventListener("click", () => {
-                    if (seat.classList.contains("unavailable")) return;
-                    seat.classList.toggle("selected");
-                    const selected = [...document.querySelectorAll(".seat.selected")].map(s => s.dataset.seat);
-                    console.log("Seat clicked. Current selection:", selected);
-                    document.getElementById("selected_seats").value = selected.join(",");
+            // Generate Seats Dynamically
+            const seatsGrid = document.getElementById('seatsGrid');
+            const rows = ['A', 'B', 'C', 'D', 'E'];
+            const cols = 7;
+
+            if (seatsGrid) {
+                seatsGrid.innerHTML = ''; // Clear existing
+                rows.forEach(row => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'seat-row';
+                    rowDiv.style.display = 'flex';
+                    rowDiv.style.justifyContent = 'center';
+                    rowDiv.style.gap = '8px';
+                    rowDiv.style.marginBottom = '8px';
+
+                    for (let i = 1; i <= cols; i++) {
+                        const seatId = `${row}${i}`;
+                        const seatDiv = document.createElement('div');
+                        seatDiv.className = 'seat';
+                        seatDiv.dataset.seat = seatId;
+                        seatDiv.textContent = seatId;
+                        seatDiv.style.width = '35px'; // Slightly smaller for more seats
+                        seatDiv.style.height = '35px';
+                        seatDiv.style.fontSize = '0.8em';
+
+                        seatDiv.addEventListener("click", () => {
+                            if (seatDiv.classList.contains("unavailable")) return;
+                            seatDiv.classList.toggle("selected");
+                            const selected = [...document.querySelectorAll(".seat.selected")].map(s => s.dataset.seat);
+                            console.log("Seat clicked. Current selection:", selected);
+                            document.getElementById("selected_seats").value = selected.join(",");
+                        });
+
+                        rowDiv.appendChild(seatDiv);
+                    }
+                    seatsGrid.appendChild(rowDiv);
                 });
-            });
+            }
+
+            // Re-select seats for availability check (since we just created them)
+            const seats = document.querySelectorAll(".seat");
 
             window.updateSeatAvailability = async function () {
                 // Since date/time are now fixed per movie, we just need to fetch for the movie

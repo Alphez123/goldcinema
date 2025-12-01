@@ -66,6 +66,7 @@ nav ul {
   list-style: none;
   display: flex;
   gap: 2em;
+  align-items: center;
 }
 
 nav ul li a {
@@ -76,12 +77,29 @@ nav ul li a {
   padding: 8px 15px;
   border-radius: 20px;
   background: rgba(255, 255, 255, 0);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+nav ul li a i {
+  font-size: 1.1em;
 }
 
 nav ul li a:hover {
   color: #fff;
   background: rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+/* Desktop only navigation items */
+.desktop-only {
+  display: flex;
+}
+
+/* Hide menu button on desktop */
+.menu-btn {
+  display: none;
 }
 
 /* 🎥 HERO SECTION */
@@ -278,32 +296,54 @@ section h2::after {
   transform: rotate(90deg);
 }
 
+/* 🎨 GLASSMORPHISM SIDEBAR */
 .sidebar {
   position: fixed;
   top: 0;
-  left: -300px;
-  width: 300px;
+  left: -350px;
+  width: 320px;
   height: 100%;
-  background: rgba(15, 12, 41, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  color: white;
+  background: rgba(20, 20, 35, 0.75);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   display: flex;
   flex-direction: column;
   padding: 60px 30px;
-  transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 9998;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: 2px solid rgba(255, 215, 0, 0.2);
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.sidebar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg,
+      rgba(255, 215, 0, 0.05) 0%,
+      rgba(255, 215, 0, 0.02) 50%,
+      rgba(48, 43, 99, 0.05) 100%);
+  pointer-events: none;
+  z-index: -1;
 }
 
 .sidebar.active {
   left: 0;
+  box-shadow:
+    0 8px 32px 0 rgba(0, 0, 0, 0.5),
+    0 0 60px rgba(255, 215, 0, 0.15),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .sidebar h2 {
   margin-bottom: 40px;
   font-size: 24px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(255, 215, 0, 0.3);
   padding-bottom: 20px;
   text-align: center;
   color: #ffd700;
@@ -311,18 +351,25 @@ section h2::after {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .menubtn {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #fff;
   font-weight: 500;
   padding: 1em 1.5em;
   margin: 10px 0;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 12px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   text-transform: uppercase;
   font-size: 0.9em;
   width: 100%;
@@ -330,12 +377,44 @@ section h2::after {
   display: flex;
   align-items: center;
   gap: 15px;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 4px 15px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.menubtn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent,
+      rgba(255, 215, 0, 0.2),
+      transparent);
+  transition: left 0.5s;
+}
+
+.menubtn:hover::before {
+  left: 100%;
 }
 
 .menubtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.2);
-  transform: translateX(5px);
+  background: rgba(255, 215, 0, 0.15);
+  border-color: rgba(255, 215, 0, 0.4);
+  transform: translateX(8px) scale(1.02);
+  box-shadow:
+    0 8px 25px rgba(255, 215, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: #ffd700;
+}
+
+.menubtn i {
+  font-size: 1.2em;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
 }
 
 /* OVERLAY */
@@ -385,6 +464,46 @@ section h2::after {
 .float-icon-btn:hover {
   background: rgba(255, 255, 255, 0.2);
   transform: scale(1.1);
+}
+
+/* Hide notification button on mobile - accessible via sidebar */
+@media (max-width: 768px) {
+  .notification-float {
+    /* Reset position for mobile modal behavior */
+    position: static;
+    display: block !important;
+    z-index: 2001;
+    /* Higher than sidebar */
+  }
+
+  .notification-float .float-icon-btn {
+    display: none !important;
+  }
+
+  .dropdown-content {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    max-height: 80vh;
+    background: rgba(20, 20, 30, 0.98);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
+    display: none;
+    /* Hidden by default */
+  }
+
+  .dropdown-content.show {
+    display: block;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .close-btn-mobile {
+    display: block !important;
+    font-size: 1.5em;
+  }
 }
 
 .badge {
@@ -611,3 +730,434 @@ section h2::after {
   color: #ff6b6b !important;
   border-color: rgba(255, 77, 77, 0.5);
 }
+
+/* BOOKING ITEM STYLES */
+.booking-item {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.booking-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 215, 0, 0.3);
+  transform: translateY(-2px);
+}
+
+/* DOWNLOAD TICKET BUTTON */
+.download-ticket-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  color: #1a1a2e;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 0.95em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+}
+
+.download-ticket-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
+  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+}
+
+.download-ticket-btn i {
+  font-size: 1.1em;
+}
+
+/* CANCEL BUTTON IN BOOKING ITEM */
+.cancel-form {
+  margin: 0;
+}
+
+.cancel-btn {
+  background: rgba(255, 77, 77, 0.1);
+  color: #ff4d4d;
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  padding: 12px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 0.95em;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.cancel-btn:hover {
+  background: rgba(255, 77, 77, 0.2);
+  border-color: rgba(255, 77, 77, 0.5);
+  transform: translateY(-2px);
+}
+
+
+/* 📱 ENHANCED MOBILE RESPONSIVENESS */
+@media (max-width: 768px) {
+
+  /* Base Typography Scaling */
+  body {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* Navbar */
+  nav {
+    padding: 0.8em 1em;
+    backdrop-filter: blur(10px);
+  }
+
+  .logo {
+    font-size: 1.4em;
+    font-weight: 600;
+  }
+
+  /* Hide desktop nav items on mobile */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Show menu button on mobile */
+  .menu-btn {
+    display: flex !important;
+  }
+
+  nav ul {
+    display: none;
+  }
+
+  /* Hero Section - Modern Mobile Typography */
+  .hero {
+    height: 90vh;
+    padding: 0 1.5em;
+    text-align: center;
+  }
+
+  .hero h1 {
+    font-size: 2.8em;
+    line-height: 1.1;
+    margin-bottom: 0.5em;
+    font-weight: 700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+  }
+
+  .hero p {
+    font-size: 1.2em;
+    line-height: 1.6;
+    margin-bottom: 2em;
+    font-weight: 300;
+    padding: 0;
+  }
+
+  /* Button Sizing for Touch */
+  .button {
+    padding: 1.2em 2.5em;
+    font-size: 1em;
+    border-radius: 25px;
+    min-height: 54px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Sections */
+  section {
+    padding: 3em 1em;
+  }
+
+  section h2 {
+    font-size: 2.2em;
+    margin-bottom: 1.2em;
+    font-weight: 600;
+  }
+
+  section h2::after {
+    width: 60px;
+  }
+
+  /* Movie Grid - Horizontal Carousel for Mobile */
+  .movie-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1.5em;
+    padding: 10px 0.5em 20px 0.5em;
+    /* Bottom padding for shadow/scroll */
+    -webkit-overflow-scrolling: touch;
+    /* Smooth scrolling on iOS */
+    scrollbar-width: none;
+    /* Hide scrollbar Firefox */
+  }
+
+  /* Hide scrollbar for Chrome/Safari/Opera */
+  .movie-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .movie {
+    flex: 0 0 280px;
+    /* Fixed width for carousel items */
+    scroll-snap-align: center;
+    border-radius: 16px;
+    margin-bottom: 0;
+    /* Remove bottom margin in carousel */
+  }
+
+  .movie img {
+    height: 300px;
+  }
+
+  .movie-info {
+    padding: 1.2em;
+  }
+
+  .movie-info h3 {
+    font-size: 1.3em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+  }
+
+  .movie-info p {
+    font-size: 0.95em;
+    line-height: 1.4;
+  }
+
+  /* Sidebar - Full Screen Modern Menu */
+  .sidebar {
+    width: 100%;
+    left: -100%;
+    padding: 80px 2em 2em;
+    background: rgba(15, 12, 41, 0.98);
+    backdrop-filter: blur(25px);
+  }
+
+  .sidebar h2 {
+    font-size: 1.8em;
+    margin-bottom: 2em;
+    padding-bottom: 1em;
+  }
+
+  .menubtn {
+    padding: 1.2em 1.5em;
+    font-size: 1em;
+    margin: 8px 0;
+    border-radius: 12px;
+    min-height: 56px;
+  }
+
+  /* Menu Button Positioning */
+  .menu-btn {
+    top: 15px;
+    right: 15px;
+    width: 48px;
+    height: 48px;
+    font-size: 1.3em;
+  }
+
+  /* Notifications - Mobile Optimized */
+  .notification-float {
+    top: 15px;
+    left: 15px;
+  }
+
+  .float-icon-btn {
+    width: 48px;
+    height: 48px;
+    font-size: 1.1em;
+  }
+
+  .dropdown-content {
+    min-width: 300px;
+    max-width: 90vw;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 70px;
+  }
+
+  /* Modals - Modern Mobile Overlay */
+  .modal-content {
+    width: 95%;
+    margin: 10vh auto;
+    padding: 1.5em;
+    border-radius: 16px;
+  }
+
+  .account-actions {
+    flex-direction: column;
+    gap: 0.8em;
+  }
+
+  .action-btn {
+    width: 100%;
+    padding: 1em;
+    font-size: 1em;
+    min-height: 50px;
+  }
+
+  /* Form Elements - Touch Friendly */
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 1em;
+    font-size: 1em;
+    min-height: 50px;
+  }
+
+  /* Booking Items */
+  .booking-item {
+    padding: 1.2em;
+    margin-bottom: 1em;
+    border-radius: 12px;
+  }
+
+  .download-ticket-btn,
+  .cancel-btn {
+    padding: 1em 1.5em;
+    font-size: 1em;
+    min-height: 48px;
+    width: 100%;
+    margin: 0.5em 0;
+  }
+
+  /* Close Button Sizing */
+  .close-btn {
+    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* 📱 SMALL PHONE OPTIMIZATION */
+@media (max-width: 480px) {
+  body {
+    font-size: 13px;
+  }
+
+  .hero h1 {
+    font-size: 2.2em;
+  }
+
+  .hero p {
+    font-size: 1.1em;
+  }
+
+  .movie-grid {
+    grid-template-columns: 1fr;
+    gap: 1em;
+  }
+
+  .movie img {
+    height: 250px;
+  }
+
+  section h2 {
+    font-size: 1.8em;
+  }
+
+  .button {
+    padding: 1.1em 2em;
+    font-size: 0.95em;
+  }
+
+  .modal-content {
+    margin: 5vh auto;
+    padding: 1.2em;
+  }
+}
+
+/* 🖥️ LARGE MOBILE / TABLET */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero h1 {
+    font-size: 3.2em;
+  }
+
+  .movie-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2em;
+  }
+
+  section {
+    padding: 4em 5%;
+  }
+}
+/* Search Bar */
+.search-bar {
+    position: relative;
+    margin-right: 20px;
+}
+
+.search-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 8px 15px 8px 35px;
+    color: #fff;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 200px;
+}
+
+.search-input:focus {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffd700;
+    width: 250px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+}
+
+/* Feature Tags in Hero */
+.hero-features {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fadeInUp 1s ease-out 0.3s both;
+}
+
+.hero-feature-tag {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-size: 0.9em;
+    color: #fff;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.hero-feature-tag:hover {
+    background: rgba(255, 215, 0, 0.2);
+    border-color: #ffd700;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.hero-feature-tag i {
+    color: #ffd700;
+}
+
