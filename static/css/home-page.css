@@ -1,4 +1,9 @@
 /* 🌐 BASE STYLES */
+:root {
+  --primary-gold: #FFD700;
+  --gold-gradient: linear-gradient(to right, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -58,7 +63,7 @@ nav {
 }
 
 .logo::before {
-  content: "🎬";
+  content: "";
   font-size: 1.2em;
 }
 
@@ -158,11 +163,11 @@ nav ul li a:hover {
 
 /* 🟢 BUTTON STYLES */
 .button {
-  background: rgba(255, 215, 0, 0.2);
-  color: #ffd700;
+  background: var(--gold-gradient);
+  color: #1a1a1a;
   font-weight: bold;
   padding: 1em 2.5em;
-  border: 1px solid rgba(255, 215, 0, 0.5);
+  border: none;
   border-radius: 30px;
   cursor: pointer;
   transition: all 0.4s ease;
@@ -170,15 +175,14 @@ nav ul li a:hover {
   text-transform: uppercase;
   font-size: 1.1em;
   letter-spacing: 2px;
-  box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+  box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
 
 .button:hover {
-  background: rgba(255, 215, 0, 0.4);
+  background: linear-gradient(to right, #AA771C, #FBF5B7, #B38728, #FCF6BA, #BF953F);
   box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-  transform: translateY(-3px);
-  color: #fff;
-  border-color: #fff;
+  transform: translateY(-3px) scale(1.02);
+  color: #000;
 }
 
 /* SECTIONS */
@@ -359,14 +363,14 @@ section h2::after {
 }
 
 .menubtn {
-  background: rgba(255, 255, 255, 0.08);
+  background: var(--gold-gradient);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: #fff;
-  font-weight: 500;
+  color: #1a1a1a;
+  font-weight: 600;
   padding: 1em 1.5em;
   margin: 10px 0;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: none;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -380,7 +384,7 @@ section h2::after {
   position: relative;
   overflow: hidden;
   box-shadow:
-    0 4px 15px rgba(0, 0, 0, 0.1),
+    0 4px 15px rgba(255, 215, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
@@ -393,7 +397,7 @@ section h2::after {
   height: 100%;
   background: linear-gradient(90deg,
       transparent,
-      rgba(255, 215, 0, 0.2),
+      rgba(255, 255, 255, 0.2),
       transparent);
   transition: left 0.5s;
 }
@@ -403,13 +407,12 @@ section h2::after {
 }
 
 .menubtn:hover {
-  background: rgba(255, 215, 0, 0.15);
-  border-color: rgba(255, 215, 0, 0.4);
+  background: linear-gradient(to right, #AA771C, #FBF5B7, #B38728, #FCF6BA, #BF953F);
   transform: translateX(8px) scale(1.02);
   box-shadow:
-    0 8px 25px rgba(255, 215, 0, 0.2),
+    0 8px 25px rgba(255, 215, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  color: #ffd700;
+  color: #000;
 }
 
 .menubtn i {
@@ -668,16 +671,24 @@ section h2::after {
 
 .action-btn {
   flex: 1;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: var(--gold-gradient);
+  color: #1a1a1a;
   text-decoration: none;
   padding: 10px;
   text-align: center;
   border-radius: 10px;
-  transition: background 0.3s;
+  transition: all 0.3s;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
+  box-shadow: 0 2px 10px rgba(255, 215, 0, 0.3);
+}
+
+.action-btn:hover {
+  background: linear-gradient(to right, #AA771C, #FBF5B7, #B38728, #FCF6BA, #BF953F);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5);
 }
 
 .form-group label {
@@ -754,7 +765,7 @@ section h2::after {
   justify-content: center;
   gap: 8px;
   padding: 12px 20px;
-  background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+  background: var(--gold-gradient);
   color: #1a1a2e;
   border: none;
   border-radius: 8px;
@@ -769,7 +780,7 @@ section h2::after {
 .download-ticket-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(255, 215, 0, 0.5);
-  background: linear-gradient(135deg, #ffed4e 0%, #ffd700 100%);
+  background: linear-gradient(to right, #AA771C, #FBF5B7, #B38728, #FCF6BA, #BF953F);
 }
 
 .download-ticket-btn i {
@@ -1092,72 +1103,72 @@ section h2::after {
     padding: 4em 5%;
   }
 }
+
 /* Search Bar */
 .search-bar {
-    position: relative;
-    margin-right: 20px;
+  position: relative;
+  margin-right: 20px;
 }
 
 .search-input {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    padding: 8px 15px 8px 35px;
-    color: #fff;
-    outline: none;
-    transition: all 0.3s ease;
-    width: 200px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 8px 15px 8px 35px;
+  color: #fff;
+  outline: none;
+  transition: all 0.3s ease;
+  width: 200px;
 }
 
 .search-input:focus {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: #ffd700;
-    width: 250px;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #ffd700;
+  width: 250px;
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
 }
 
 .search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: rgba(255, 255, 255, 0.6);
-    pointer-events: none;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
 }
 
 /* Feature Tags in Hero */
 .hero-features {
-    display: flex;
-    gap: 15px;
-    margin-top: 20px;
-    margin-bottom: 30px;
-    flex-wrap: wrap;
-    justify-content: center;
-    animation: fadeInUp 1s ease-out 0.3s both;
+  display: flex;
+  gap: 15px;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeInUp 1s ease-out 0.3s both;
 }
 
 .hero-feature-tag {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 8px 20px;
-    border-radius: 50px;
-    font-size: 0.9em;
-    color: #fff;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 8px 20px;
+  border-radius: 50px;
+  font-size: 0.9em;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
 }
 
 .hero-feature-tag:hover {
-    background: rgba(255, 215, 0, 0.2);
-    border-color: #ffd700;
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  background: rgba(255, 215, 0, 0.2);
+  border-color: #ffd700;
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 .hero-feature-tag i {
-    color: #ffd700;
+  color: #ffd700;
 }
-
