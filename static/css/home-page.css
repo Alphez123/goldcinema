@@ -102,9 +102,11 @@ nav ul li a:hover {
   display: flex;
 }
 
-/* Hide menu button on desktop */
-.menu-btn {
-  display: none;
+/* Hide menu button on desktop - will be shown on mobile */
+@media (min-width: 769px) {
+  .menu-btn {
+    display: none !important;
+  }
 }
 
 /* 🎥 HERO SECTION */
@@ -431,7 +433,7 @@ section h2::after {
   opacity: 0;
   visibility: hidden;
   transition: 0.3s ease;
-  z-index: 999;
+  z-index: 9997;
   backdrop-filter: blur(8px);
 }
 
