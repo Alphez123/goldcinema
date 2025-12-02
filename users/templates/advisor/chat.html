@@ -1,23 +1,29 @@
-style="padding: 15px; background: rgba(255, 215, 0, 0.1); border-bottom: 1px solid rgba(255, 215, 0, 0.2); display:
-flex; justify-content: space-between; align-items: center;">
-<h3 style="color: #ffd700; margin: 0;">Chat with {{ other_user.first_name }} {{ other_user.last_name }}</h3>
-<a href="{% url 'advisor_dashboard' %}" style="color: #ccc; text-decoration: none;"><i class="fas fa-arrow-left"></i>
-    Back</a>
-</div>
+{% extends 'advisor/advisor_base.html' %}
 
-<div id="chat-messages"
-    style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
-    <!-- Messages will be loaded here -->
-    <p style="text-align: center; color: #888;">Loading messages...</p>
-</div>
+{% block content %}
+<div class="chat-interface"
+    style="display: flex; flex-direction: column; height: 100%; background: #1e1e1e; border-radius: 10px; overflow: hidden; border: 1px solid #333;">
+    <div class="chat-header"
+        style="padding: 15px; background: rgba(255, 215, 0, 0.1); border-bottom: 1px solid rgba(255, 215, 0, 0.2); display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="color: #ffd700; margin: 0;">Chat with {{ other_user.first_name }} {{ other_user.last_name }}</h3>
+        <a href="{% url 'advisor_dashboard' %}" style="color: #ccc; text-decoration: none;"><i
+                class="fas fa-arrow-left"></i>
+            Back</a>
+    </div>
 
-<div class="chat-input"
-    style="padding: 15px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px;">
-    <input type="text" id="messageInput" placeholder="Type a message..."
-        style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #444; background: #222; color: #fff;">
-    <button id="sendBtn"
-        style="padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Send</button>
-</div>
+    <div id="chat-messages"
+        style="flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 10px;">
+        <!-- Messages will be loaded here -->
+        <p style="text-align: center; color: #888;">Loading messages...</p>
+    </div>
+
+    <div class="chat-input"
+        style="padding: 15px; background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px;">
+        <input type="text" id="messageInput" placeholder="Type a message..."
+            style="flex: 1; padding: 10px; border-radius: 5px; border: 1px solid #444; background: #222; color: #fff;">
+        <button id="sendBtn"
+            style="padding: 10px 20px; background: #ffd700; color: #000; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Send</button>
+    </div>
 </div>
 
 <script>
@@ -115,8 +121,8 @@ flex; justify-content: space-between; align-items: center;">
         if (e.key === 'Enter') sendMessage();
     });
 
-    // Poll for new messages every 2 seconds
-    setInterval(fetchMessages, 2000);
+    // Poll for new messages every 1 second
+    setInterval(fetchMessages, 1000);
 
     // Initial fetch
     fetchMessages();

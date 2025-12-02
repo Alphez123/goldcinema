@@ -24,9 +24,11 @@ def advisor_dashboard(request):
     # We can also just list all users for now, or filter by those who initiated chat
     
     # Get distinct users involved in chats
+    # Get distinct users who have chatted with THIS advisor
     chat_users = CustomUser.objects.filter(
-        Q(sent_messages__isnull=False) | Q(received_messages__isnull=False)
-    ).distinct().exclude(id=request.user.id)
+        Q(sent_messages__receiver=request.user) | 
+        Q(received_messages__sender=request.user)
+    ).distinct()
 
     # Annotate with last message time or unread count if needed
     # For now, just pass the list
