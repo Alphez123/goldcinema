@@ -14,8 +14,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ============================================================
 # SECRET KEY & DEBUG
 # ============================================================
-SECRET_KEY = os.environ.get('SECRET_KEY', 'development-secret-key')
-DEBUG = os.environ.get("DEBUG", "True") == "True"
+SECRET_KEY = os.environ.get('SECRET_KEY', 'development-secret-key' ,'DJANGO_SECRET_KEY', 'dev-secret-key')
+
+DEBUG = False
+
 
 # ============================================================
 # ALLOWED HOSTS
@@ -131,8 +133,8 @@ STATICFILES_DIRS = [
 ]
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # ============================================================
 # CLOUDINARY STORAGE
