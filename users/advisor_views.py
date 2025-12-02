@@ -56,6 +56,29 @@ def advisor_chat(request, user_id):
 # ================================
 # USER CHAT
 # ================================
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
+def advisor_login(request):
+    if request.user.is_authenticated and (request.user.is_advisor or request.user.is_superuser):
+        return redirect("advisor_dashboard")
+
+    if request.method == "POST":
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        
+        user = authenticate(request, username=email, password=password)
+        if user is not None:
+            if user.is_advisor or user.is_superuser:
+                login(request, user)
+                return redirect("advisor_dashboard")
+            else:
+                messages.error(request, "Access denied. Not an advisor account.")
+        else:
+            messages.error(request, "Invalid credentials.")
+            
+    return render(request, "advisor/login.html")
+
 @login_required
 def advisor_list(request):
     """
@@ -70,6 +93,24 @@ def advisor_list(request):
     return render(request, "advisor_list.html", {
         "advisors": advisors
     })
+
+def api_get_advisors(request):
+    """
+    API to get list of advisors for the popup
+    """
+    advisors = CustomUser.objects.filter(is_advisor=True)
+    if not advisors.exists():
+        advisors = CustomUser.objects.filter(is_superuser=True)
+    
+    data = []
+    for adv in advisors:
+        data.append({
+            "id": adv.id,
+            "name": f"{adv.first_name} {adv.last_name}" if adv.first_name else adv.username,
+            "status": "Online" # Simplified for now
+        })
+    
+    return JsonResponse({"advisors": data})
 
 @login_required
 def user_chat(request, advisor_id=None):

@@ -228,8 +228,8 @@
             if (e.key === 'Enter') sendMessage();
         });
 
-        // Poll for new messages every 2 seconds
-        setInterval(fetchMessages, 2000);
+        // Poll for new messages every 1 second
+        setInterval(fetchMessages, 1000);
 
         // Initial fetch
         fetchMessages();

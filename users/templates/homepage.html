@@ -334,7 +334,7 @@
                     <ul class="footer-list contact-info">
                         <li>
                             <i class="fas fa-map-marker-alt"></i>
-                             Cinema Street, Nairobi
+                            Cinema Street, Nairobi
                         </li>
                         <li>
                             <i class="fas fa-phone"></i>
@@ -359,7 +359,7 @@
                     © 2025 Gold Cinema. All Rights Reserved.
                 </div>
                 <p class="tagline">
-                    Crafted with <i class="fas fa-heart" class="heartbeat"></i> ALPHEZ
+                    Crafted by ALPHEZ
                 </p>
                 <div class="footer-policies">
                     <a href="#" class="policy-link">Privacy Policy</a>
@@ -1459,12 +1459,26 @@
     <script src="{% static 'js/script.js' %}"></script>
 
 
-    <!-- Advisor Support Popup -->
-    <a href="{% url 'advisor_list' %}" id="advisorSupportBtn"
+    <!-- Advisor Support Popup Button -->
+    <a href="#" id="advisorSupportBtn"
         style="position: fixed; bottom: 20px; right: 20px; background: #ffd700; color: #1a1a1a; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 15px rgba(255, 215, 0, 0.5); display: flex; align-items: center; gap: 10px; z-index: 1000; transition: transform 0.3s ease;">
         <i class="fas fa-headset" style="font-size: 1.2em;"></i>
         <span>Advisor Support</span>
     </a>
+
+    <!-- Advisor Selection Modal -->
+    <div id="advisorModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeAdvisorModal">&times;</span>
+            <h2><i class="fas fa-headset"></i> Select an Advisor</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">Choose an available advisor to start a live chat.</p>
+
+            <div id="advisorList"
+                style="display: flex; flex-direction: column; gap: 10px; max-height: 300px; overflow-y: auto;">
+                <p style="text-align: center; color: #ffd700;">Loading available advisors...</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Note: This script assumes the necessary JavaScript functions (like for modal handling and sidebar toggle) are defined in script.js
@@ -1479,17 +1493,79 @@
             overlay.classList.toggle('active');
         }
 
-        menuBtn.addEventListener('click', toggleSidebar);
-        overlay.addEventListener('click', toggleSidebar);
+        if (menuBtn) menuBtn.addEventListener('click', toggleSidebar);
+        if (overlay) overlay.addEventListener('click', toggleSidebar);
 
-        // Advisor Support button hover effect
+        // Advisor Support Logic
         const supportBtn = document.getElementById('advisorSupportBtn');
+        const advisorModal = document.getElementById('advisorModal');
+        const closeAdvisorModal = document.getElementById('closeAdvisorModal');
+        const advisorList = document.getElementById('advisorList');
+
+        // Open Modal & Fetch Advisors
+        supportBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            advisorModal.style.display = 'block';
+            fetchAdvisors();
+        });
+
+        // Close Modal
+        closeAdvisorModal.addEventListener('click', () => {
+            advisorModal.style.display = 'none';
+        });
+
+        // Close on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target == advisorModal) {
+                advisorModal.style.display = 'none';
+            }
+        });
+
+        // Hover effect
         supportBtn.addEventListener('mouseenter', () => {
             supportBtn.style.transform = 'scale(1.05)';
         });
         supportBtn.addEventListener('mouseleave', () => {
             supportBtn.style.transform = 'scale(1)';
         });
+
+        async function fetchAdvisors() {
+            try {
+                const response = await fetch('/api/advisors/');
+                const data = await response.json();
+
+                advisorList.innerHTML = '';
+
+                if (data.advisors && data.advisors.length > 0) {
+                    data.advisors.forEach(adv => {
+                        const div = document.createElement('div');
+                        div.className = 'booking-item'; // Reusing existing style
+                        div.style.cursor = 'pointer';
+                        div.style.display = 'flex';
+                        div.style.justifyContent = 'space-between';
+                        div.style.alignItems = 'center';
+                        div.innerHTML = `
+                            <div>
+                                <h3 style="margin: 0; color: #fff; font-size: 1.1em;">${adv.name}</h3>
+                                <span style="color: #4caf50; font-size: 0.8em;">● ${adv.status}</span>
+                            </div>
+                            <i class="fas fa-comment-dots" style="color: #ffd700; font-size: 1.2em;"></i>
+                        `;
+
+                        div.addEventListener('click', () => {
+                            window.location.href = `/support/chat/${adv.id}/`;
+                        });
+
+                        advisorList.appendChild(div);
+                    });
+                } else {
+                    advisorList.innerHTML = '<p style="text-align: center; color: #aaa;">No advisors currently available. Please try again later.</p>';
+                }
+            } catch (error) {
+                console.error('Error fetching advisors:', error);
+                advisorList.innerHTML = '<p style="text-align: center; color: #ff4d4d;">Failed to load advisors.</p>';
+            }
+        }
     </script>
 
 </body>

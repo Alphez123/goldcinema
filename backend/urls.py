@@ -98,11 +98,13 @@ urlpatterns = [
     # ==========================
     # ADVISOR SYSTEM
     # ==========================
-    path("advisor/dashboard/", advisor_views.advisor_dashboard, name="advisor_dashboard"),
-    path("advisor/chat/<int:user_id>/", advisor_views.advisor_chat, name="advisor_chat"),
+    path("advisor-portal/", advisor_views.advisor_login, name="advisor_login"),
+    path("advisor-portal/dashboard/", advisor_views.advisor_dashboard, name="advisor_dashboard"),
+    path("advisor-portal/chat/<int:user_id>/", advisor_views.advisor_chat, name="advisor_chat"),
     
     # User Side Support
-    path("support/advisors/", advisor_views.advisor_list, name="advisor_list"),
+    path("support/advisors/", advisor_views.advisor_list, name="advisor_list"), # Fallback page
+    path("api/advisors/", advisor_views.api_get_advisors, name="api_get_advisors"), # API for popup
     path("support/chat/", advisor_views.user_chat, name="user_chat"),
     path("support/chat/<int:advisor_id>/", advisor_views.user_chat, name="user_chat_with_advisor"),
     
