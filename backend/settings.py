@@ -14,7 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ============================================================
 # SECRET KEY & DEBUG
 # ============================================================
-SECRET_KEY = os.environ.get('SECRET_KEY', 'development-secret-key' ,'DJANGO_SECRET_KEY', 'dev-secret-key')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'development-secret-key' )
 
 DEBUG = False
 
@@ -168,7 +168,7 @@ EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False') == 'True'
 
 # SMTP Authentication
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'goldcinematheatre@gmail.com')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')  # Your SMTP password
+EMAIL_HOST_PASSWORD = os.environ.get('nkqgcuxmiiiiffes', '')  # Your SMTP password
 
 # Default sender email
 DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'Gold Cinema <goldcinematheatre@gmail.com>')
